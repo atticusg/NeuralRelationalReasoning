@@ -103,7 +103,7 @@ for $t > 0$, with $h_{0} = \mathbf{0}$. $\LSTM$ is a long short-term memory cell
 
 \begin{figure}[H]
   \centering
-  \resizebox{350pt}{!}{%
+  \resizebox{240pt}{!}{%
     \begin{tikzpicture}[
       % GLOBAL CFG
       font=\sf \large,
@@ -326,7 +326,7 @@ where $W_{xh}$, $W_{hy}$, $b_h$, and $b_y$ are the parameters from the model in 
 
 \begin{figure}[H]
   \centering
-  \resizebox{250pt}{!}{%
+  \resizebox{240pt}{!}{%
     \begin{tikzpicture}[
       % GLOBAL CFG
       font=\sf \large,
@@ -428,7 +428,7 @@ Our pretraining model closely resembles the models used for our main experiments
   y_{i,j} &= \softmax(h^{i}W_{hy}^{j} + b_{y}^{j})
 \end{align}
 %
-where $E[i]$ is the vector representation for example $i$ in the embedding matrix $E$. The overall objective of the model is to minimize the sum of the task losses. For $N$ examples, $J$ tasks, and $K_{j}$ the number of classes for task $j$:
+where $E[i]$ is the vector representation for example $i$ in the embedding matrix $E$. The overall objective of the model is to maximize the sum of the task objective functions. For $N$ examples, $J$ tasks, and $K_{j}$ the number of classes for task $j$:
 %
 \begin{equation}
   \max(\theta)
@@ -464,7 +464,7 @@ Localist representations are orthogonal and equidistant from one another so ther
 
 Distributed representations with binary features also limit generalization, though less severely than localist representations. Localist representations prevent generalization to entities unseen during training, while binary feature representations prevent generalization to features unseen during training. For example, if color and shape are represented as binary features, and a red square and blue circle are seen in training, then a model could generalize to the unseen entities of a blue circle or a red square. However, if no entity that is a circle is seen during training, then the binary feature representing the property of being a circle is zero throughout training and untrained weights are used when the model is presented with a entity that is a circle during testing, which results in unpredictable behavior.
 
-Distributed representations with analog features do not inhibit generalization in the same way. If height is represented as a binary feature, then a single unit represents all height values and is always non-zero. Random distributed representations similarly do not inhibit generalization, because all units for all representations are non-zero and the network can learn parameters that create complex associations between these entities and its task labels.
+Distributed representations with analog features do not inhibit generalization in the same way. If height is represented as a binary feature, then a single unit represents all height values and is always non-zero. Non-featural representations similarly do not inhibit generalization, because all units for all representations are non-zero and the network can learn parameters that create complex associations between these entities and its task labels.
 
 
 \section{An analytic solution to identity with a feed forward network}\label{app:equality-solution}
@@ -554,7 +554,8 @@ We let $d = 2n + 1$ and assign the following parameters, which provide an analyt
   f_t &= \sigma(x_t \textbf{0}_{n\times d} + h_{t-1}\textbf{0}_{d \times d} + \textbf{N}_{d}) \\
   i_t &= \sigma(x_t\textbf{0}_{n\times d} + h_{t-1}\begin{bmatrix} -4 \dots -4 \\ \textbf{0}_{2n\times n} \end{bmatrix}  + \textbf{N}_d)   \\
   o_t &= \sigma(x_t\textbf{0}_{n\times d} +  h_{t-1} \begin{bmatrix} 1 \dots 1 \\ \textbf{0}_{2n\times n} \end{bmatrix} + \textbf{0}_{d})\\
-  c_t &= f_t \circ c_{t-1} + i_t \circ \ReLU\left(x_t \begin{bmatrix} 0 &  & \\ \vdots & -I_{n \times n} & I_{n \times n}\\ 0 & &  \end{bmatrix} + h_{t-1}\textbf{0}_{d \times d} + \begin{bmatrix} N & 0 \dots 0\end{bmatrix}\right) \\
+  c_t &= f_t \circ c_{t-1} + \\
+  & i_t \circ \ReLU\left(x_t \begin{bmatrix} 0 &  & \\ \vdots & -I_{n \times n} & I_{n \times n}\\ 0 & &  \end{bmatrix} + h_{t-1}\textbf{0}_{d \times d} + \begin{bmatrix} N & 0 \dots 0\end{bmatrix}\right) \\
   h_t &= o_t \circ \ReLU(c_t)\\
   y &= h_t \begin{bmatrix} 0 \dots 0 \\ -I_{n \times n} \\ I_{n \times n}  \end{bmatrix}
 \end{align*}
@@ -576,7 +577,8 @@ The gates at the first time step are easy to compute, as the cell state and hidd
 Then we compute the cell and hidden states at the first timestep. The cell state encodes the information of the input vector, so it can be used to recover the vector at a later time step and receives no information from the previous cell state despite the forget gate being open, because the previous cell state is a zero vector. The hidden state is the cell state scaled by one half.
 %
 \begin{align*}
-  c_1 &= \textbf{N}_d\circ \textbf{0}_d+  \textbf{1}_d \circ \ReLU\left(x_1\begin{bmatrix} 0 &  & \\ \vdots & -I_{n \times n} & I_{n \times n}\\ 0 & &  \end{bmatrix} + \begin{bmatrix} N & 0 \dots 0\end{bmatrix}\right) \\
+  c_1 &= \textbf{N}_d\circ \textbf{0}_d+ \\
+      & \textbf{1}_d \circ \ReLU\left(x_1\begin{bmatrix} 0 &  & \\ \vdots & -I_{n \times n} & I_{n \times n}\\ 0 & &  \end{bmatrix} + \begin{bmatrix} N & 0 \dots 0\end{bmatrix}\right) \\
       & = \ReLU\left( \begin{bmatrix} N & -x_1 & x_1 \end{bmatrix}\right) \\[1ex]
   h_1 &= \textbf{0.5}_d\ReLU \left(\ReLU( \begin{bmatrix} N & -x_1 & x_1 \end{bmatrix})\right) \\
       &= \textbf{0.5}_d\circ \ReLU( \begin{bmatrix} N & -x_1 & x_1 \end{bmatrix})
@@ -597,7 +599,8 @@ At the next time step, the forget gate remains fully open, the open gate changes
 Then we compute the cell and hidden states for the second timestep. Because the forget gate is completely open and the input gate is completely closed, the cell state remains the same. Because the output gate is completely open, the hidden state is the same as the cell state.
 %
 \begin{align*}
-  c_2 &= \textbf{1}_d \circ \ReLU \left( \begin{bmatrix} N & -x_1 & x_1 \end{bmatrix}\right) + \textbf{0}_d\circ \ReLU(x_2\begin{bmatrix} 0 &  & \\ \vdots & -I_{n \times n} & I_{n \times n}\\ 0 & &  \end{bmatrix} + \begin{bmatrix} N & 0 \dots 0\end{bmatrix}) \\
+  c_2 &= \textbf{1}_d \circ \ReLU \left( \begin{bmatrix} N & -x_1 & x_1 \end{bmatrix}\right) +\\
+      & \textbf{0}_d\circ \ReLU(x_2\begin{bmatrix} 0 &  & \\ \vdots & -I_{n \times n} & I_{n \times n}\\ 0 & &  \end{bmatrix} + \begin{bmatrix} N & 0 \dots 0\end{bmatrix}) \\
       &= \ReLU \left( \begin{bmatrix} N & -x_1 & x_1 \end{bmatrix}\right) \\[2ex]
   h_2 &= \textbf{1}_d \circ \ReLU\left(\ReLU ( \begin{bmatrix} N & -x_1 & x_1 \end{bmatrix})\right) \\
       &= \ReLU \left( \begin{bmatrix} N & -x_1 & x_1 \end{bmatrix}\right)
@@ -606,7 +609,8 @@ Then we compute the cell and hidden states for the second timestep. Because the 
 With the hidden states for the first and second time steps, we can compute the output values and find that the output at the first time step is the initial input vector scaled by one half and the output at the second time step is the initial input vector.
 
 \begin{align*}
-  y_1 &= h_1\begin{bmatrix} 0 \dots 0 \\ -I_{n \times n} \\ I_{n \times n}  \end{bmatrix} = \textbf{0.5}_d\circ \ReLU\left( \begin{bmatrix} N & -x_1 & x_1 \end{bmatrix}\right) \begin{bmatrix} 0 \dots 0 \\ -I_{n \times n} \\ I_{n \times n}  \end{bmatrix} = \textbf{0.5}_d\circ x_1\\
+  y_1 &= h_1\begin{bmatrix} 0 \dots 0 \\ -I_{n \times n} \\ I_{n \times n}  \end{bmatrix} = \textbf{0.5}_d\circ \ReLU\left( \begin{bmatrix} N & -x_1 & x_1 \end{bmatrix}\right) \begin{bmatrix} 0 \dots 0 \\ -I_{n \times n} \\ I_{n \times n}  \end{bmatrix} \\
+      &= \textbf{0.5}_d\circ x_1\\
   y_2 &= h_2\begin{bmatrix} 0 \dots 0 \\ -I_{n \times n} \\ I_{n \times n}  \end{bmatrix} = \texttt{ReLu} ( \begin{bmatrix} N & -x_1 & x_1 \end{bmatrix}) \begin{bmatrix} 0 \dots 0 \\ -I_{n \times n} \\ I_{n \times n}  \end{bmatrix} = x_1
 \end{align*}
 %
