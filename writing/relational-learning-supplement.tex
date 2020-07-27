@@ -1,5 +1,49 @@
 %\input{pre-pnas-supp}
 
+\section{Model 1 Supplementary Methods}
+
+The input to our model is a pair of vectors $(a, b)$, each of dimension $m$, which correspond to the two stimulus objects. These vectors are non-featural representations that do not have features encoding properties of the objects or their identity. These are concatenated to form a single vector $[a;b]$ of dimension $2m$, which is the simplest way of merging the two representations to form a single input.
+
+This representation is multiplied by a matrix of weights $W_{xh}$ of dimension $2m \times n$ and a bias vector $b_{h}$ of dimension $n$ is added to this result, where $n$ is the hidden layer dimensionality. These two steps create a linear projection of the input representation, and the bias term is the value of this linear projection when the input representation is the zero vector. Then, the non-linear activation function $\ReLU$ ($\ReLU(x) = \max(0, x)$) is applied element-wise to this linear projection. This non-linearity is what gives the neural model more expressive power than a logistic regression \citep{Cybenko:1989,Hornik:Stinchcombe:White:1989}. The result is the hidden representation $h$.
+
+The hidden representation is the input to the classification layer: $h$ is multiplied by a second matrix of weights $W_{hy}$, dimension $n \times 2$, and a bias term $b_{y}$ (dimension 2) is added to this. This second bias term encodes the probabilities of each class when the hidden representation is 0. The result is fed through the softmax activation function: $\softmax(x)_{i} = \frac{\exp{x_{i}}}{\sum_{j} \exp{x_{j}}}$. This creates a probability distribution over the classes (positive and negative). For a given input, the model computes this probability distribution and the input is categorized as the class with the higher probability.
+
+During training, this model is presented with positive and negative labeled examples and the parameters $W_{xh}$, $W_{hy}$, $b_{y}$, and $b_{h}$ are learned using back propagation with a cross entropy function. \update{This function is defined as follows, for a set of $N$ examples and $K$ classes:
+%
+\begin{equation}
+\max(\theta)
+\quad
+\frac{1}{N}
+\sum_{i=1}^{N}
+\sum_{k=1}^{K}
+y^{i,k} \log(h_{\theta}(i)^{k})
+\end{equation}
+%
+where $\theta$ abbreviates the model parameters ($W_{xh}$, $W_{hy}$, $b_{y}$, $b_{h}$), $y^{i,k}$ is the actual label for example $i$ and class $k$, and $h_{\theta}(i)^{k}$ is the corresponding prediction.}
+
+
+\section{Model 2 Supplementary Methods}
+
+The input to this model is a sequence of vectors $x_1, x_2, x_3, \dots$, each of dimension $m$, which correspond to a sequence of stimulus objects. These vectors are, again, non-featural representations that do not have features encoding properties of the objects or their identity.
+
+
+At each timestep $t$, the input vector $x_t$ is fed into the $\LSTM$ cell along with the previous hidden representation $h_{t-1}$. The defining feature of an $\LSTM$ is the ability to decide whether to store information from the current input, $x_t$, and whether to remember or forget the information from the previous timestep $h_{t-t}$. The output of the $\LSTM$ cell is the hidden representation for the current time step $h_t$. The dimension of the hidden representations is $n$. The hidden representation is multiplied by a matrix $W$ with dimensionality $n \times m$ to produce $y_t$. This result, $y_t$, is a linear projection of the hidden representation into the input vector space, which is necessary because $y_t$ is a prediction of what the next input, $x_{t+1}$, will be.
+
+% \update{
+The objective function is as follows:
+%
+\begin{equation}
+\max(\theta)
+\quad
+-\frac{1}{N}
+\sum_{i=1}^{N}
+\sum_{t=1}^{T_{i}}
+\left\| h_{\theta}\left(x^{i, 0:{t-1}}\right) - x^{i,t} \right\|^{2}
+\end{equation}
+%
+for $N$ examples. Here, $T_{i}$ is the length of example $i$. As before, $\theta$ abbreviates the parameters of the model as specified in \dasheg{eq:lstm-recur}{eq:lstm-predict}. We use $h_{\theta}(x^{i, 0:{t-1}})$ for the vector predicted by the model for example~$i$ at timestep~$t$, which is compared to the actual vector at timestep $t$ via squared Euclidean distance (i.e., the mean squared error).
+% As noted above, this is an unusual formulation for a language model. The usual version essentially treats every timestep as involving a classification decision, with a cross-entropy loss. We cannot adopt this because of our goal of using unseen vocabulary items at test time. % MCF: seemed redundant
+
 
 \section{Model figures}
 
