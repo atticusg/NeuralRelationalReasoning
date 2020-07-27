@@ -17,6 +17,8 @@
 }
 \makeatother
 
+\newcommand{\methref}{Methods}
+\newcommand{\SIref}{SI}
 
 \dropcap{O}ne of the key components of human intelligence is our ability to reason about abstract relations between stimuli. Many of the most unremarkable human activities -- scheduling a meeting, following traffic signs, assembling furniture -- require a fluency with abstraction and relational reasoning that is unmatched in nonhuman animals. An influential perspective on human uniqueness holds that relational concepts are critical to higher-order cognition \citep[e.g.,][]{Gentner:2003}. By far the most common case study of abstract relations has been equality.\footnote{We use the term ``equality'' here, though different literatures have also used ``identity.''} Equality is a valuable case study because it is simple and ubiquitous, but also completely abstract in the sense that it can be evaluated regardless of the identity of the stimuli being judged.
 
@@ -24,13 +26,13 @@ Equality reasoning has been studied extensively across a host of systems and tas
 
 The learning task in all of these cases can be described using the predicate \emph{same} (or equivalently, =), which operates over two inputs and returns {\sc true} if they are identical in some respect. One perspective in the literature is that success in these learning tasks implies the presence of an equivalent symbolic description in the mind of the solver \cite{marcus:1999,Premack:1983}. This view does not provide a lever to distinguish which of these tasks are trivial and which are difficult, however. Further, it can fall prey to circularity: because newborns show sensitivity to identity relations \cite{gervain:2012}, then it would follow from this argument that they must have symbolic representations. If this logic applies also to bees, then we presuppose symbolic representations universally and have no account of the gradient difficulty of different tasks for different species.
 
-An explanation of when same--different tasks are trivial and when they are difficult requires a theoretical framework beyond the symbolic/non-symbolic distinction. To make quantitative predictions about task performance, such a framework should ideally be instantiated in a computational model that takes in training data and learns a solution that generalizes when assessed with stimuli analogous to those used in experimental assessments. Symbolic computational models \cite[e.g.,][]{frank:2011} can be used to make contact with data about the breadth of generalization, but they require the existence of a symbolic equality predicate and hence again presuppose symbolic abilities in every case of success. Ideally, we would want a model that describes under what conditions \emph{same} is easy and under what conditions it is hard or unlearnable -- and how learning proceeds in these hard cases. We take the development of such an account to be our goal here.
+An explanation of when same--different tasks are trivial and when they are difficult requires a theoretical framework beyond the symbolic/non-symbolic distinction. To make quantitative predictions about task performance, such a framework should ideally be instantiated in a computational model that takes in training data and learns a solution that generalizes when assessed with stimuli analogous to those used in experimental assessments. Symbolic computational models \cite[e.g.,][]{frank:2011} can be used to make contact with data about the breadth of generalization, but they require the existence of a symbolic equality predicate and hence again presuppose symbolic abilities in every case of success. Ideally, we would want a model that describes under what conditions \emph{same} is easy and under what conditions it is hard or unlearnable -- and how learning proceeds in these hard cases. Here, we aim to lay the foundation for the development of such an account.
 
-We are inspired by an emergent perspective in the animal learning literature that suggests that the representations underlying non-human animals' and human infants' successes in equality reasoning tasks are graded \cite{wasserman:2017}. This view acknowledges the increasing evidence that other species like pigeons \cite{cook2007}, crows \cite{smirnova2015}, and baboons \cite{fagot2011} can make true, out-of-sample generalizations of \emph{same} and \emph{different} relations, but it also recognizes that the observed patterns of behavior do not show the hallmarks of all-or-none symbolic representations. Instead, performance is graded. Out-of-sample generalization is possible but the level of performance depends critically on the diversity of the training stimuli \cite[e.g.,][]{castro2010}. Success typically requires hundreds, thousands, or even tens of thousands of training trials. And the eventual outcome of learning is noisy and imperfect.
+We are inspired by an emergent perspective in the animal learning literature that the representations underlying non-human animals' and human infants' successes in equality reasoning tasks are graded \cite{wasserman:2017}. This view acknowledges the increasing evidence that other species like pigeons \cite{cook2007}, crows \cite{smirnova2015}, and baboons \cite{fagot2011} can make true, out-of-sample generalizations of \emph{same} and \emph{different} relations, but it also recognizes that the observed patterns of behavior do not show the hallmarks of all-or-none symbolic representations. Instead, performance is graded. Out-of-sample generalization is possible but the level of performance depends critically on the diversity of the training stimuli \cite[e.g.,][]{castro2010}. Success requires hundreds, thousands, or even tens of thousands of training trials. And the outcome of learning is noisy and imperfect.
 
-These learning signatures appear to be a close match to the kind of learning exhibited by neural network models, a flexible framework for arbitrary function learning that has enjoyed a huge resurgence of interest in recent years \cite{lecun2015}. Contra this proposal, however, \cite{marcus:1999} argued that a broad class of recurrent neural networks were unable to learn equality relations. These claims were subsequently challenged by the presentation of evidence that neural networks are able to learn (at least aspects of) the tasks that \cite{marcus:1999} posed \cite{dienes:1999,seidenberg:1999a,seidenberg:1999b,elman:1999,negishi:1999}. The subsequent debate \cite[reviewed in][]{alhama:2019} revealed a striking lack of consensus on some of the ground rules regarding what sort of generalization would be required to show that the learned function was suitably abstract. In addition, only a narrow range of network architectures and representations was explored.
+These learning signatures appear to be a close match to the kind of learning exhibited by neural networks, a flexible framework for arbitrary function learning that has enjoyed a huge resurgence of interest in recent years \cite{lecun2015}. Contra this proposal, however, \cite{marcus:1999} argued that a broad class of recurrent neural networks were unable to learn equality relations. These claims were subsequently challenged by the presentation of evidence that neural networks are able to learn (at least aspects of) the tasks that \cite{marcus:1999} posed \cite{dienes:1999,seidenberg:1999a,seidenberg:1999b,elman:1999,negishi:1999}. The subsequent debate \cite[reviewed in][]{alhama:2019} revealed a striking lack of consensus on some of the ground rules regarding what sort of generalization would be required to show that the learned function was suitably abstract. In addition, only a narrow range of network architectures and representations was explored.
 
-We revisit this debate here, adopting stringent criteria for generalization and considering a broader range of representations across three models. We model three cases of identity-based reasoning that have featured prominently in discussions of the role of symbols in relational reasoning (\figref{fig:tasks}): (1) learning to discriminate pairs of objects that exemplify the relation \emph{same} or \emph{different}, (2) learning sequences with repeated \emph{same} elements \cite{marcus:1999}, and (3) learning to distinguish hierarchical \emph{same} and \emph{different} relations in a context with pairs of pairs exemplifying these relations \cite{Premack:1983}. This last problem is more challenging and requires vastly more data. We show how using pretraining -- an active area of development in recent artificial intelligence research \cite{CollobertWeston:2011,Mikolov-etal:2013,pennington-socher-manning:2014:EMNLP2014,Peters-etal:2018,Devlin-etal:2019} -- can help achieve far faster learning.
+We revisit this debate here, adopting stringent criteria for generalization and considering a broader range of representations across three models. We model three cases of equality-based reasoning that have featured prominently in discussions of the role of symbols in relational reasoning (\figref{fig:tasks}): (1) learning to discriminate pairs of objects that exemplify the relation \emph{same} or \emph{different}, (2) learning sequences with repeated \emph{same} elements \cite{marcus:1999}, and (3) learning to distinguish hierarchical \emph{same} and \emph{different} relations in a context with pairs of pairs exemplifying these relations \cite{Premack:1983}. We show how using pretraining -- an active area of development in recent artificial intelligence research \cite{CollobertWeston:2011,Mikolov-etal:2013,pennington-socher-manning:2014:EMNLP2014,Peters-etal:2018,Devlin-etal:2019} -- can help achieve far faster learning on the more difficult hierarchical task.
 
 Across these three models, we find strong support for their ability to learn equality relations. These results should serve to revise the conclusions of the earlier debate. Marcus and colleagues \cite{marcus:1999,marcus:2001} showed experimentally that neural networks using feature representations cannot generalize to binary features unseen in training. We agree with this claim (and support it with a direct mathematical argument in \appref{app:generalization}). However, they concluded from this result that neural networks will need to have primitive symbolic operators to solve hard relational reasoning tasks. On this point, we disagree. Our experiments show that networks without these primitives can solve a range of these tasks, as long as they use non-featural representations. Overall, these findings suggest that essential aspects of symbolic reasoning can emerge from entirely data-driven, non-symbolic learning processes.
 
@@ -89,12 +91,13 @@ Across these three models, we find strong support for their ability to learn equ
  \node[regular polygon,regular polygon sides=7, minimum height=4mm, fill=blue!100]{};
 \end{tikzpicture}}
 
+\newcommand{\minshape}{6mm}
 
 \begin{figure*}[t!]
 \setlength{\arraycolsep}{2pt}
 \centering
 \small
-\begin{subfigure}[t]{0.1\textwidth}
+\begin{subfigure}[t]{0.02\textwidth}
  \centering
  \begin{tabular}[b]{@{} c @{}}
   \midrule
@@ -110,8 +113,7 @@ Across these three models, we find strong support for their ability to learn equ
  \caption{}
  \label{fig:entities}
 \end{subfigure}
-\hfill
-\begin{subfigure}[t]{0.25\textwidth}
+\begin{subfigure}[t]{0.16\textwidth}
  \centering
  \renewcommand{\arraystretch}{1.18}
  $\begin{array}[b]{*{6}{c}}
@@ -130,8 +132,7 @@ Across these three models, we find strong support for their ability to learn equ
  \caption{Localist.}
  \label{fig:reps:localist}
 \end{subfigure}
-\hfill
-\begin{subfigure}[t]{0.14\textwidth}
+\begin{subfigure}[t]{0.09\textwidth}
  \centering
  \renewcommand{\arraystretch}{1.18}
  $\begin{array}[b]{*{3}{r}}
@@ -150,8 +151,7 @@ Across these three models, we find strong support for their ability to learn equ
  \caption{Distributed.}
  \label{fig:reps:symbolic}
 \end{subfigure}
-\hfill
-\begin{subfigure}[t]{0.2\textwidth}
+\begin{subfigure}[t]{0.082\textwidth}
  \centering
  \renewcommand{\arraystretch}{1.18}
  $\begin{array}[b]{rr}
@@ -170,8 +170,7 @@ Across these three models, we find strong support for their ability to learn equ
  \caption{Random.}
  \label{fig:reps:random}
 \end{subfigure}
-\hfill
-\begin{subfigure}[t]{0.2\textwidth}
+\begin{subfigure}[t]{0.09\textwidth}
  \centering
  \renewcommand{\arraystretch}{1.18}
  $\begin{array}[b]{rr}
@@ -190,70 +189,64 @@ Across these three models, we find strong support for their ability to learn equ
  \caption{Pretrained.}
  \label{fig:reps:pretrained}
 \end{subfigure}
-
-\vspace{12pt}
-
-\begin{subfigure}[c]{0.48\linewidth}
+\begin{subfigure}[t]{0.24\linewidth}
 \centering
-\begin{tikzpicture}[scale=0.86]
+\begin{tikzpicture}[scale=0.6]
 \begin{axis}[
  title={},
  grid=major,
 axis lines=middle,
  no markers,
  every axis plot/.append style={ultra thick},
- xmin=-2.3, xmax=2.3,
- ymin=-2.3, ymax=2.3,
- xtick={-2,-1,0,1,2},
- ytick={-2,-1,0,1,2}
+ xmin=-0.4999, xmax=0.55,
+ ymin=-0.4999, ymax=0.55,
+ ticks=none
 ]
-\node[regular polygon,regular polygon sides=3, fill=red!100,inner sep=2pt] at (axis cs:0.25644314, 0.12540874) {};
-\node[regular polygon,regular polygon sides=4, fill=blue!100] at (axis cs:0.25999054, -0.29644176) {};
-\node[regular polygon,regular polygon sides=5, fill=red!100] at (axis cs:0.049219638, 0.42767277) {};
-\node[regular polygon,regular polygon sides=6, fill=blue!100] at (axis cs:-0.061883904, 0.19825003) {};
-\node[regular polygon,regular polygon sides=7, fill=red!100] at (axis cs:-0.37857392, 0.47314683) {};
-\node[regular polygon,regular polygon sides=3, fill=blue!100,inner sep=2pt] at (axis cs:0.10887167, -0.26070255) {};
-\node[regular polygon,regular polygon sides=4, fill=red!100] at (axis cs:-0.34162185, 0.050839007) {};
-\node[regular polygon,regular polygon sides=5, fill=blue!100] at (axis cs:0.05225141, -0.4067908) {};
-\node[regular polygon,regular polygon sides=6, fill=red!100] at (axis cs:0.49225715, 0.4129299) {};
-\node[regular polygon,regular polygon sides=7, fill=blue!100] at (axis cs:-0.038552105, -0.38253385) {};
- %\node[regular polygon,regular polygon sides=3, fill=blue!100,inner sep=2pt] at (axis cs:-0.35932082, 0.17664503) {};
- %\node[regular polygon,regular polygon sides=3, fill=red!100,inner sep=2pt] at (axis cs: 0.23422007, -0.23213634) {};
- %\node[regular polygon,regular polygon sides=4, fill=blue!100] at (axis cs:0.4148342 , 0.02179685) {};
- %\node[regular polygon,regular polygon sides=4, fill=red!100] at (axis cs:-0.19870198, -0.02996263) {};
- %\node[regular polygon,regular polygon sides=5, fill=blue!100] at (axis cs: 0.23975432 , 0.40730593) {};
- %\node[regular polygon,regular polygon sides=5, fill=red!100] at (axis cs:0.49842966 , 0.17170991) {};
+\node[regular polygon, minimum height=6mm,regular polygon sides=3, fill=red!100,inner sep=2pt] at (axis cs:0.25644314, 0.12540874) {};
+\node[regular polygon, minimum height=6mm,regular polygon sides=4, fill=blue!100] at (axis cs:0.25999054, -0.29644176) {};
+\node[regular polygon, minimum height=6mm,regular polygon sides=5, fill=red!100] at (axis cs:0.049219638, 0.42767277) {};
+\node[regular polygon, minimum height=6mm,regular polygon sides=6, fill=blue!100] at (axis cs:-0.061883904, 0.19825003) {};
+\node[regular polygon, minimum height=\minshape,regular polygon sides=7, fill=red!100] at (axis cs:-0.37857392, 0.47314683) {};
+\node[regular polygon, minimum height=\minshape,regular polygon sides=3, fill=blue!100,inner sep=2pt] at (axis cs:0.10887167, -0.26070255) {};
+\node[regular polygon, minimum height=\minshape,regular polygon sides=4, fill=red!100] at (axis cs:-0.34162185, 0.050839007) {};
+\node[regular polygon, minimum height=\minshape,regular polygon sides=5, fill=blue!100] at (axis cs:0.05225141, -0.4067908) {};
+\node[regular polygon, minimum height=\minshape,regular polygon sides=6, fill=red!100] at (axis cs:0.46225715, 0.4129299) {};
+\node[regular polygon, minimum height=\minshape,regular polygon sides=7, fill=blue!100] at (axis cs:-0.038552105, -0.38253385) {};
+ %\node[regular polygon, minimum height=\minshape,regular polygon sides=3, fill=blue!100,inner sep=2pt] at (axis cs:-0.35932082, 0.17664503) {};
+ %\node[regular polygon, minimum height=\minshape,regular polygon sides=3, fill=red!100,inner sep=2pt] at (axis cs: 0.23422007, -0.23213634) {};
+ %\node[regular polygon, minimum height=\minshape,regular polygon sides=4, fill=blue!100] at (axis cs:0.4148342 , 0.02179685) {};
+ %\node[regular polygon, minimum height=\minshape,regular polygon sides=4, fill=red!100] at (axis cs:-0.19870198, -0.02996263) {};
+ %\node[regular polygon, minimum height=\minshape,regular polygon sides=5, fill=blue!100] at (axis cs: 0.23975432 , 0.40730593) {};
+ %\node[regular polygon, minimum height=\minshape,regular polygon sides=5, fill=red!100] at (axis cs:0.49842966 , 0.17170991) {};
 \end{axis}
 \end{tikzpicture}
- \caption{The matrix in \figref{fig:reps:random} (before pretraining).}
+ \caption{The matrix in \figref{fig:reps:random}.}
 
  \label{fig:tsne-random}
 \end{subfigure}
-\hfill
-\begin{subfigure}[c]{0.48\linewidth}
+\begin{subfigure}[t]{0.24\linewidth}
 \centering
-\begin{tikzpicture}[scale=0.86]
+\begin{tikzpicture}[scale=0.6]
 \begin{axis}[
  title={},
  no markers,
  grid=major,
 axis lines=middle,
  every axis plot/.append style={ultra thick},
- xmin=-2.3, xmax=2.3,
- ymin=-2.3, ymax=2.3,
- xtick={-2,-1,0,1,2},
- ytick={-2,-1,0,1,2}
+ xmin=-0.9, xmax=1.8,
+ ymin=-1.99, ymax=0.99,
+ticks=none
 ]
-\node[regular polygon,regular polygon sides=3, fill=red!100,inner sep=2pt] at (axis cs:0.043389633, 0.8164206) {};
-\node[regular polygon,regular polygon sides=4, fill=blue!100] at (axis cs:-0.7053148, -1.812479) {};
-\node[regular polygon,regular polygon sides=5, fill=red!100] at (axis cs:-0.19551103, 0.4328718) {};
-\node[regular polygon,regular polygon sides=6, fill=blue!100] at (axis cs:1.6731963, -1.0493283) {};
-\node[regular polygon,regular polygon sides=7, fill=red!100] at (axis cs:-0.19127868, -0.034780912) {};
-\node[regular polygon,regular polygon sides=3, fill=blue!100,inner sep=2pt] at (axis cs:-0.40698338, -0.91700864) {};
-\node[regular polygon,regular polygon sides=4, fill=red!100] at (axis cs:-0.24272422, 0.16861145) {};
-\node[regular polygon,regular polygon sides=5, fill=blue!100] at (axis cs:0.88247913, -0.13587654) {};
-\node[regular polygon,regular polygon sides=6, fill=red!100] at (axis cs:-0.075923756, 0.29488102) {};
-\node[regular polygon,regular polygon sides=7, fill=blue!100] at (axis cs:2.1035564, -2.6820786) {};
+\node[regular polygon, minimum height=6mm,regular polygon sides=3, fill=red!100,inner sep=2pt] at (axis cs:0.043389633, 0.8164206) {};
+\node[regular polygon, minimum height=6mm,regular polygon sides=4, fill=blue!100] at (axis cs:-0.7053148, -1.812479) {};
+\node[regular polygon, minimum height=6mm,regular polygon sides=5, fill=red!100] at (axis cs:-0.19551103, 0.4328718) {};
+\node[regular polygon, minimum height=6mm,regular polygon sides=6, fill=blue!100] at (axis cs:1.6731963, -1.0493283) {};
+\node[regular polygon, minimum height=\minshape,regular polygon sides=7, fill=red!100] at (axis cs:-0.19127868, -0.034780912) {};
+\node[regular polygon, minimum height=\minshape,regular polygon sides=3, fill=blue!100,inner sep=2pt] at (axis cs:-0.40698338, -0.91700864) {};
+\node[regular polygon, minimum height=\minshape,regular polygon sides=4, fill=red!100] at (axis cs:-0.24272422, 0.16861145) {};
+\node[regular polygon, minimum height=\minshape,regular polygon sides=5, fill=blue!100] at (axis cs:0.88247913, -0.13587654) {};
+\node[regular polygon, minimum height=\minshape,regular polygon sides=6, fill=red!100] at (axis cs:-0.075923756, 0.29488102) {};
+\node[regular polygon, minimum height=\minshape,regular polygon sides=7, fill=blue!100] at (axis cs:2.1035564, -2.6820786) {};
  %\node[regular polygon,regular polygon sides=3, fill=blue!100,inner sep=2pt] at (axis cs:-1.2906312,  0.36732233]) {};
  %\node[regular polygon,regular polygon sides=3, fill=red!100,inner sep=2pt] at (axis cs: -0.09487347, -1.1454606) {};
  %\node[regular polygon,regular polygon sides=4, fill=blue!100] at (axis cs:-0.8569037 , 1.1844875) {};
@@ -262,13 +255,16 @@ axis lines=middle,
  %\node[regular polygon,regular polygon sides=5, fill=red!100] at (axis cs:1.2290089, -0.08361815) {};
 \end{axis}
 \end{tikzpicture}
- \caption{The matrix in \figref{fig:reps:pretrained} (after pretraining).}
+ \caption{The matrix in \figref{fig:reps:pretrained}.}
  \label{fig:tsne-pretrained}
 \end{subfigure}
 
 \caption{Each matrix is a method for representing the shapes in \figref{fig:entities}, where each row is a vector representation of one shape. Localist and distributed are feature representations where each vector dimension encodes the value of a single property. Random and pretrained are non-featural representations where the values of properties are encoded implicitly in two dimensions. Random representations and localist representations encode only identity, whereas distributed representations and pretrained representations encode color and number of sides.}
 \label{fig:reps}
 \end{figure*}
+
+
+
 
 \section{Designing theoretical models of equality learning}
 
@@ -290,7 +286,7 @@ To address this issue, \update{we follow \cite{marcus:1999} in proposing} that n
 % \updatea{
 Essentially all modern machine learning models represent objects using vectors of real numbers. However, there are important differences in how these vectors are used to encode the properties of objects. In this section, we characterize two broad approaches to such property encoding -- \tech{featural representations} and \tech{non-featural representations} -- and argue that the differences between them have not been given sufficient attention in the debate about the ability of neural networks to perform relational reasoning.
 
-To ground our discussion, we consider a hypothetical universe of blocks which vary by shape and color. \Figref{fig:entities} is a partial view of them, and \figref{fig:reps:localist}--\figref{fig:reps:pretrained} present four different ways of encoding the properties of these objects in vectors.
+We ground our discussion in a hypothetical universe of blocks which vary by shape and color. \Figref{fig:entities} is a partial view of them, and \figref{fig:reps:localist}--\figref{fig:reps:pretrained} present four different ways of encoding the properties of these objects in vectors.
 
 \subsubsection{Featural Representations}
 
@@ -300,15 +296,15 @@ We use the term \tech{localist} for the special case of featural representations
 
 A featural representation that is not localist is often called a \tech{distributed representation}. Here, column dimensions encode specific properties of objects. Coming back to our universe of blocks, we can represent the properties of being red and being blue with two different binary features, and the property of having a certain number of sides as a single analog feature, as in \figref{fig:reps:symbolic}. Unlike with localist representations, objects in this space can have complex relationships to each other, as encoded in the shared structure given by the columns.
 
-Featural representations -- both localist and distributed -- have the appealing property that they are easy for researchers to interpret because of the tight correspondence between column dimensions and properties. However, this transparency actually inhibits neural networks from discovering general solutions; such models work far better with representations that have property values implicitly encoded in the abstract structure of the vector space. We demonstrate this result analytically in \appref{app:generalization} for the case of binary features. The core insight is that networks cannot learn anything about column dimensions that are not represented in their training data; whatever weights are associated with those dimensions are unchanged by the learning process, so predictions about those dimensions remain random at test time. A line of research that has been pursued to overcome this analytic limation of featural representations is to modify standard neural architectures or network weight priors \cite{weyde2019,weyde2018,kopparti2020}.  We simply choose not to use feature representations, and instead opt for non-featural representations which do not have this analytic limation and are the norm in state-of-the-art artificial intelligence models.
+Featural representations -- both localist and distributed -- have the appealing property that they are easy for researchers to interpret because of the tight correspondence between column dimensions and properties. However, this transparency actually inhibits neural networks from discovering general solutions; such models work far better with representations that have property values implicitly encoded in the abstract structure of the vector space. We demonstrate this result analytically in \appref{app:generalization} for the case of binary features. The core insight is that networks cannot learn anything about column dimensions that are not represented in their training data; whatever weights are associated with those dimensions are unchanged by the learning process, so predictions about those dimensions remain random at test time. \cite{weyde2019,weyde2018,kopparti2020} overcome this analytic limation of featural representations by modifying standard neural architectures or network weight priors.  We simply choose not to use featural representations, and instead opt for non-featural representations which do not have this analytic limation and are the norm in state-of-the-art artificial intelligence models.
 
 
 
 \subsubsection{Non-Featural Representations}
 
-A \tech{non-featural representation} is a vector that encodes property values implicitly across many dimensions. Perhaps the simplest non-featural representations are \tech{completely random} vectors, as in \figref{fig:reps:random}. Random representations can be seen as the non-featural counterpart to localist representations. In both of these representation schemes, all the objects are equally (un)related to each other, since column-wise patterns are unlikely in random representations and, to the extent that they are present, they exist completely by chance. However, in random representations, all the column dimensions can contribute meaningfully to identifying objects, whereas a localist representation has only one vector unit that determines the identity of any given object object.
+A \tech{non-featural representation} is a vector that encodes property values implicitly across many dimensions. Perhaps the simplest non-featural representations are \tech{completely random} vectors, as in \figref{fig:reps:random}. Random representations can be seen as the non-featural counterpart to localist representations. In both of these representation schemes, all the objects are equally (un)related to each other, since column-wise patterns are unlikely in random representations and, to the extent that they are present, they exist completely by chance. However, in random representations, all the column dimensions can contribute meaningfully to identifying objects, whereas a localist representation has only one vector unit that determines the identity of any given object.
 
-Random representations are a starting point that encodes object identity. To encode more diverse information, we can \tech{pretrain} random representations via a learning process. This will imbue them with rich structure that implicitly encodes property values across many dimensions. \Figref{fig:reps:pretrained} provides a simple example. This matrix is the results of pretraining the representations in \figref{fig:reps:random} on the task of predicting whether the object is blue, whether the object is red, and the number of sides the object has. (\Appref{app:pretraining} provides technical details on our pretraining approach.) Superficially, the two matrices look equally random. However, this is only because our pretraining process leads to property values being implicitly represented by linear structures in the vector representation space. The random representations in \figref{fig:tsne-random} have no such linear structure (e.g., no line separates blue and red objects). However, the pretrained representations in \figref{fig:tsne-pretrained} have a implicit linear structure (e.g., there is a line that separates blue and red objects).
+Random representations are a starting point that encodes object identity. To encode more diverse information, we can \tech{pretrain} random representations via a learning process. This will imbue them with rich structure that implicitly encodes property values across many dimensions. \Figref{fig:reps:pretrained} provides a simple example. This matrix is the results of pretraining the representations in \figref{fig:reps:random} on the task of predicting whether the object is blue, whether the object is red, and the number of sides the object has. (\Appref{app:pretraining} provides technical details on our pretraining approach.) Superficially, the two matrices look equally random. However, this is only because our pretraining process leads to property values being implicitly represented by structures in the vector representation space. The random representations in \figref{fig:tsne-random} have no such structure, while the pretrained representations in \figref{fig:tsne-pretrained} do --  e.g., there is a line that separates blue and red objects.
 
 Pretraining need not be restricted to input representations. All the parameters of a model can be pretrained. In this setting, a small amount of task-specific training (often called ``fine-tuning'') might suffice. This offers the possibility that networks might be used as modular components to solve more complex tasks. We realize this possibility with our third experiment, where a model pretrained on a simple equality is used as a modular component to compute hierarchical equality.
 
@@ -326,107 +322,39 @@ Pretraining need not be restricted to input representations. All the parameters 
 
 % \subsection{The current paper}
 
-
+%\begin{figure*}[tp]
+%\centering
+%\begin{subfigure}[t]{0.48\linewidth}
+% \includegraphics[width=1\linewidth]{../fig/equality-train_size-embed_dim-hidden_dim=100.pdf}
+% \vspace{-4mm}
+% \caption{Results for a model in which the hidden layer has dimensionality $100$. The lines correspond to different dimensions for the entities $a$ and $b$ in the input pairs $(a, b)$. The best model passes 90\% accuracy with 1,000 training examples and reaches (near) perfection by 1,250.}
+% \label{fig:equality--smallresults}
+%\end{subfigure}
+%\hfill
+%\begin{subfigure}[t]{0.48\linewidth}
+% \centering
+% \includegraphics[width=1\linewidth]{../fig/equality-pretrain-compare-train_size-pretrained-embed_dim=None.pdf}
+% \caption{\update{Results where random representations are grounded in a number of property domains via pretraining learning tasks. The `no pretraining' model is the best of the models at left (10-dimensional embeddings, 100-dimensional hidden layers), repeated to facilitate comparisons. The pretraining models use those same dimensionalities.}}
+% \label{fig:basic-equality-pretrain}
+%\end{subfigure}
+%\caption{Same--different results with and without pretraining.}
+%\end{figure*}
 
 \section{Model 1: Same--different relations}\label{sec:equality}
 
-In our first model, we consider whether a supervised, feed-forward classification model can learn equality (and inequality) relations in the strict setting we describe above: non-featural representations with disjoint generalization examples.
+First, we investigate whether a supervised single layer feed-forward neural network can learn the equality relation in the strict setting we describe above where train and test vocabulary are disjoint. The input is a pair of vectors $(a, b)$ which correspond to the two stimulus objects. These vectors are non-featural representations that do not have features encoding properties of the objects or their identity. During training, this model is presented with positive and negative labeled examples. During testing, this model is tasked with categorizing inputs unseen during training. It is straightforward to show that a network like this is capable of learning equality as we have defined it. \Appref{app:equality-solution} provides an analytic solution to the equality relation using this neural model.
 
-\subsection{Model}
-
-Our basic model for equality is a feed-forward neural network with a single hidden representation layer:
-%
-\begin{align}
-h &= \ReLU([a;b]W_{xh} + b_{h}) \label{eq:x2h}\\
-y &= \softmax(hW_{hy} + b_{y}) \label{eq:h2y}
-\end{align}
-%
-The input is a pair of vectors $(a, b)$, each of dimension $m$, which correspond to the two stimulus objects. These vectors are non-featural representations that do not have features encoding properties of the objects or their identity. These are concatenated to form a single vector $[a;b]$ of dimension $2m$, which is the simplest way of merging the two representations to form a single input.
-
-This representation is multiplied by a matrix of weights $W_{xh}$ of dimension $2m \times n$ and a bias vector $b_{h}$ of dimension $n$ is added to this result, where $n$ is the hidden layer dimensionality. These two steps create a linear projection of the input representation, and the bias term is the value of this linear projection when the input representation is the zero vector. Then, the non-linear activation function $\ReLU$ ($\ReLU(x) = \max(0, x)$) is applied element-wise to this linear projection. This non-linearity is what gives the neural model more expressive power than a logistic regression \citep{Cybenko:1989,Hornik:Stinchcombe:White:1989}. The result is the hidden representation $h$.
-
-The hidden representation is the input to the classification layer: $h$ is multiplied by a second matrix of weights $W_{hy}$, dimension $n \times 2$, and a bias term $b_{y}$ (dimension 2) is added to this. This second bias term encodes the probabilities of each class when the hidden representation is 0. The result is fed through the softmax activation function: $\softmax(x)_{i} = \frac{\exp{x_{i}}}{\sum_{j} \exp{x_{j}}}$. This creates a probability distribution over the classes (positive and negative). For a given input, the model computes this probability distribution and the input is categorized as the class with the higher probability.
-
-
-\begin{figure*}[tp]
-\centering
-\begin{subfigure}[t]{0.48\linewidth}
- \includegraphics[width=1\linewidth]{../fig/equality-train_size-embed_dim-hidden_dim=100.pdf}
- \vspace{-4mm}
- \caption{Results for a model in which the hidden layer has dimensionality $100$. The lines correspond to different dimensions for the entities $a$ and $b$ in the input pairs $(a, b)$. The best model passes 90\% accuracy with 1,000 training examples and reaches (near) perfection by 1,250.}
- \label{fig:equality--smallresults}
-\end{subfigure}
-\hfill
-\begin{subfigure}[t]{0.48\linewidth}
- \centering
- \includegraphics[width=1\linewidth]{../fig/equality-pretrain-compare-train_size-pretrained-embed_dim=None.pdf}
- \caption{\update{Results where random representations are grounded in a number of property domains via pretraining learning tasks. The `no pretraining' model is the best of the models at left (10-dimensional embeddings, 100-dimensional hidden layers), repeated to facilitate comparisons. The pretraining models use those same dimensionalities.}}
- \label{fig:basic-equality-pretrain}
-\end{subfigure}
-\caption{Same--different results with and without pretraining.}
-\end{figure*}
-
-During training, this model is presented with positive and negative labeled examples and the parameters $W_{xh}$, $W_{hy}$, $b_{y}$, and $b_{h}$ are learned using back propagation with a cross entropy function. \update{This function is defined as follows, for a set of $N$ examples and $K$ classes:
-%
-\begin{equation}
-\max(\theta)
-\quad
-\frac{1}{N}
-\sum_{i=1}^{N}
-\sum_{k=1}^{K}
-y^{i,k} \log(h_{\theta}(i)^{k})
-\end{equation}
-%
-where $\theta$ abbreviates the model parameters ($W_{xh}$, $W_{hy}$, $b_{y}$, $b_{h}$), $y^{i,k}$ is the actual label for example $i$ and class $k$, and $h_{\theta}(i)^{k}$ is the corresponding prediction.}
-
-During testing, this model is tasked with categorizing inputs unseen during training. It is straightforward to show that a network like this is capable of learning equality as we have defined it. \Appref{app:equality-solution} provides an analytic solution to the equality relation using this neural model. \update{Here we illustrate with a small example network that maps all identity pairs to $[0.5, 0.5]$ and all non-identity pairs to $[y, 1-y]$ where $y > 0.5$, which supports a trivial classification rule:
-%
-
-\setlength{\arraycolsep}{2pt}
-\begin{equation}
-\resizebox{0.91\hsize}{!}{
-$\softmax\left(
-  \ReLU\left(
-    [a;b]
-    \left(
-      \begin{array}[c]{@{} *{4}{r} @{}}
-        1 & 0 & -1 & 0 \\
-        0 & 1 & 0 & -1 \\
-        -1 & 0 & 1 & 0 \\
-        0 & -1 & 0 & 1
-      \end{array}
-    \right)
-    +
-    \mathbf{0}
-  \right)
-  \left(
-    \begin{array}[c]{@{} r r @{}}
-      1 & 0 \\
-      1 & 0\\
-      1 & 0\\
-      1 & 0\\
-    \end{array}
-  \right)
-  +
-  \mathbf{0}
-\right)$
-}
-\end{equation}}
-
-
-
-
-This result shows that equality in our sense is learnable in principle, but it doesn't resolve the question of whether networks can find this kind of solution given finite training data. To address this, we train the network on a stream of pairs of random vectors. Half of these are identity pairs $(a, a)$, labeled with $1$, and half are non-identity pairs $(a, b)$, labeled with $0$. Trained networks are assessed on the same kind of balanced dataset, with vectors that were never seen in training so that, as discussed earlier, we get a clear picture of whether they have found a generalizable solution. Further optimization details are in \appref{app:optimization}.
-
-
+This result shows that equality in our sense is learnable in principle, but it doesn't resolve the question of whether networks can find this kind of solution given finite training data. To address this, we train the network on a stream of pairs of random vectors. Half of these are identity pairs $(a, a)$, labeled with $1$, and half are non-identity pairs $(a, b)$, labeled with $0$. Trained networks are assessed on the same kind of balanced dataset, with vectors that were never seen in training so that, as discussed earlier, we get a clear picture of whether they have found a generalizable solution.
 
 \subsection{Results}
 
-\Figref{fig:equality--smallresults} presents typical results. This is for the case where the hidden layer dimensionality is $100$, and we plot results for different embedding dimensionalities $m$ and different amounts of training data. The picture is comparable with hidden dimensionalities at 10, 25, and 50, but those models require more training data to reach (near) perfect performance (\appref{app:model1-results}).
+\Figref{fig:basic-equality-pretrain} shows our results. The representations used in these experiments are random representations that were pretrained using a linear classifier for 0, 3, 5, or 10 different binary feature discrimination tasks. For example, following \figref{fig:reps}, a three-task model might be trained to encode the binary properties of being blue, having four sides, and being red. For all representations, this neural model reaches above-chance performance almost immediately, but requires upwards of 1,000 examples to achieve near perfect accuracy.   Interestingly, we see a clear speed-up, with more pretraining tasks resulting in the largest gains; by grounding our representations in ``property domains'' (as represented by the different task dimensions), we imbue them with implicit structure that makes learning easier.
 
-While all the networks in \figref{fig:equality--smallresults} reach above-chance performance almost immediately, they require upwards of 1,000 examples to truly solve these tasks. We additionally ran the above experiments using random representations that were pretrained using a linear classifier for 0, 3, 5, or 10 different feature discrimination tasks. For example, following \figref{fig:reps}, a three-task model might be trained to encode the properties of color, number of sides, and size.
+%\Figref{fig:equality--smallresults} presents typical results. This is for the case where the hidden layer dimensionality is $100$, and we plot results for different embedding dimensionalities $m$ and different amounts of training data. The picture is comparable with hidden dimensionalities at 10, 25, and 50, but those models require more training data to reach (near) perfect performance (\appref{app:model1-results}).
 
-\Figref{fig:basic-equality-pretrain} summarizes the results of these experiments for 10-dimensional embeddings and 100-dimensional hidden representations, as this seems to be the network that learns the fastest with random inputs. Interestingly, we see a clear speed-up, with more pretraining tasks resulting in the largest gains; by grounding our representations in ``property domains'' (as represented by the different task dimensions), we imbue them with implicit structure that makes learning easier.
+%While all the networks in \figref{fig:equality--smallresults} reach above-chance performance almost immediately, they require upwards of 1,000 examples to truly solve these tasks. We additionally ran the above experiments using random representations that were pretrained using a linear classifier for 0, 3, 5, or 10 different feature discrimination tasks. For example, following \figref{fig:reps}, a three-task model might be trained to encode the properties of color, number of sides, and size.
+
+%\Figref{fig:basic-equality-pretrain} summarizes the results of these experiments for 10-dimensional embeddings and 100-dimensional hidden representations, as this seems to be the network that learns the fastest with random inputs. Interestingly, we see a clear speed-up, with more pretraining tasks resulting in the largest gains; by grounding our representations in ``property domains'' (as represented by the different task dimensions), we imbue them with implicit structure that makes learning easier.
 
 \subsection{Discussion}
 
@@ -434,164 +362,148 @@ Our assessment pairs have nothing in common with the training pairs except insof
 
 
 
+%\begin{figure*}[tp]
+%\centering
+%\begin{subfigure}[t]{0.48\textwidth}
+% \centering
+% \includegraphics[width=1\linewidth]{../fig/fuzzy-lm-vocab20-train_size-embed_dim-hidden_dim=100.pdf}
+% \caption{Results for a model in which each $h_{t}$ in Eq.~\eg{eq:lstm-recur} has dimensionality 100. The lines correspond to the dimensionality of the input representations ($x_t$ in Eq.~\eg{eq:lstm-recur}). All the training examples are presented at once over multiple epochs.}
+% \label{fig:fuzzy-lm-results}
+%\end{subfigure}
+%\hfill
+%\begin{subfigure}[t]{0.48\textwidth}
+% \centering
+% \includegraphics[width=1\linewidth]{../fig/fuzzy-lm-pretrain-compare-train_size-pretrained-embed_dim=None.pdf}
+% \caption{Results where random representations are grounded via pretraining learning tasks. Simulations adopt the best-performing settings from the no-pretraining condition (2-dimensional embeddings, 100-dimensional hidden representations).}
+% \label{fig:fuzzy-lm-pretrain-results}
+%\end{subfigure}
+%\caption{Sequential same--different results with and without pretraining.}
+%\end{figure*}
+
+
 \begin{figure*}[tp]
 \centering
-\begin{subfigure}[t]{0.48\textwidth}
+\begin{subfigure}[t]{0.48\linewidth}
  \centering
- \includegraphics[width=1\linewidth]{../fig/fuzzy-lm-vocab20-train_size-embed_dim-hidden_dim=100.pdf}
- \caption{Results for a model in which each $h_{t}$ in Eq.~\eg{eq:lstm-recur} has dimensionality 100. The lines correspond to the dimensionality of the input representations ($x_t$ in Eq.~\eg{eq:lstm-recur}). All the training examples are presented at once over multiple epochs.}
- \label{fig:fuzzy-lm-results}
+ \includegraphics[width=1\linewidth]{../fig/equality-pretrain-compare-train_size-pretrained-embed_dim=None.pdf}
+ \caption{Results for single layer feed-forward neural networks trained on our simple equality task. The 'no pretraining' model is provided random representations and the 'k-task pretraining' models are provided random representations are grounded in $k$ binary property domains via pretraining learning tasks. }
+ \label{fig:basic-equality-pretrain}
 \end{subfigure}
 \hfill
 \begin{subfigure}[t]{0.48\textwidth}
  \centering
  \includegraphics[width=1\linewidth]{../fig/fuzzy-lm-pretrain-compare-train_size-pretrained-embed_dim=None.pdf}
- \caption{Results where random representations are grounded via pretraining learning tasks. Simulations adopt the best-performing settings from the no-pretraining condition (2-dimensional embeddings, 100-dimensional hidden representations).}
+ \caption{Results for LSTM recursive neural networks trained on our sequential equality task. The 'no pretraining' model is provided random representations and the 'k-task pretraining' models are provided random representations are grounded in $k$ binary property domains via pretraining learning tasks.  All the training examples are presented at once over multiple epochs}
  \label{fig:fuzzy-lm-pretrain-results}
 \end{subfigure}
-\caption{Sequential same--different results with and without pretraining.}
 \end{figure*}
+
+
+
+
+
 \section{Model 2: Sequential same--different (ABA task)}\label{sec:lms}
 
 Our first model is simple and successfully learns equality. However, this model is supervised with both positive and negative evidence. In the initial debate around these issues, supervision with negative evidence was dismissed as an unreasonably strong learning regime \citep[e.g.,][]{marcus:1999a}. While this argument likely holds true for language learning \citep[in which supervision is generally agreed not to be binary or direct;][]{brown:1970,chouinard2003}, it is not necessarily true for learning more generally. Nevertheless, learning of sequential rules without negative feedback is possible for infants \cite{marcus:1999,rabagliati:2019}. In experiments of this type, infants are presented with a set of positive examples. Our next model explores whether neural network models can learn this task in a challenging regime with no negative supervision.
 
-\subsection{Model}
-
-To explore learning with only positive instances, we use neural language models. These models are sequential: at each timestep, they predict an output given their predictions about the preceding timesteps. As typically formulated, the prediction function is just a classifier: at each timestep, it predicts a probability distribution over the entire vocabulary of options, and the item with the highest probability is chosen as a symbolic output. This output becomes the input at the next timestep, and the process continues.
+To explore learning with only positive instances, we use a neural LSTM language model, a recursive network with the ability to selectively forget and remember information\cite{hochreiter:1997}. Language models are sequential: at each timestep, they predict an output given their predictions about the preceding timesteps. As typically formulated, the prediction function is just a classifier: at each timestep, it predicts a probability distribution over the entire vocabulary of options, and the item with the highest probability is chosen as a symbolic output. This output becomes the input at the next timestep, and the process continues.
 
 This formulation will not work in situations in which we want to make predictions about test items with an entirely disjoint vocabulary from the training sample. The classifier function will get no feedback about these out-of-vocabulary items during training, and so it will never predict them during testing. To address this issue, we reformulate the prediction function. Our proposal is to have the model predict output vector representations -- instead of discrete vocabulary items -- at each timestep. During training, the model is trained to minimize the distance between these output predictions and the representations of the actual output entities. During assessment, we take the prediction to be the item in the entire vocabulary (training and assessment) whose representation is closest to the predicted vector (in terms of Euclidean distance). This fuzzy approach to prediction creates enough space for the model to predict sequences from an entirely new vocabulary.
 
-The specific model we use for this is as follows:
-%
-\begin{align}
-h_{t} &= \LSTM(x_{t}, h_{t-1}) \label{eq:lstm-recur}\\
-y_{t} &= h_{t}W + b\label{eq:lstm-predict}
-\end{align}
-%
-This holds for $t > 0$, and we set $h_{0} = \mathbf{0}$. $\LSTM$ is a long short-term memory cell \cite{hochreiter:1997}. Full details on these cells are given in \appref{sec:analyticlm}.
-
-The input is a sequence of vectors $x_1, x_2, x_3, \dots$, each of dimension $m$, which correspond to a sequence of stimulus objects. These vectors are, again, non-featural representations that do not have features encoding properties of the objects or their identity.
-
-
-At each timestep $t$, the input vector $x_t$ is fed into the $\LSTM$ cell along with the previous hidden representation $h_{t-1}$. The defining feature of an $\LSTM$ is the ability to decide whether to store information from the current input, $x_t$, and whether to remember or forget the information from the previous timestep $h_{t-t}$. The output of the $\LSTM$ cell is the hidden representation for the current time step $h_t$. The dimension of the hidden representations is $n$. The hidden representation is multiplied by a matrix $W$ with dimensionality $n \times m$ to produce $y_t$. This result, $y_t$, is a linear projection of the hidden representation into the input vector space, which is necessary because $y_t$ is a prediction of what the next input, $x_{t+1}$, will be.
-
-% \update{
-The objective function is as follows:
-%
-\begin{equation}
-\max(\theta)
-\quad
--\frac{1}{N}
-\sum_{i=1}^{N}
-\sum_{t=1}^{T_{i}}
-\left\| h_{\theta}\left(x^{i, 0:{t-1}}\right) - x^{i,t} \right\|^{2}
-\end{equation}
-%
-for $N$ examples. Here, $T_{i}$ is the length of example $i$. As before, $\theta$ abbreviates the parameters of the model as specified in \dasheg{eq:lstm-recur}{eq:lstm-predict}. We use $h_{\theta}(x^{i, 0:{t-1}})$ for the vector predicted by the model for example~$i$ at timestep~$t$, which is compared to the actual vector at timestep $t$ via squared Euclidean distance (i.e., the mean squared error).
-% As noted above, this is an unusual formulation for a language model. The usual version essentially treats every timestep as involving a classification decision, with a cross-entropy loss. We cannot adopt this because of our goal of using unseen vocabulary items at test time. % MCF: seemed redundant
-
-\Appref{sec:analyticlm} provides an analytic solution to the ABA task using this model. To see how well the model performs in practice, we trained networks on sequences \texttt{<s> a b a </s>}, where $\texttt{b} \neq \texttt{a}$. We show the network every such sequence during training, from an underlying vocabulary of 20 items (creating a total of 380 examples). To assess how well the model learns this pattern, we seed it with \texttt{<s> x} where \texttt{x} is an item from a disjoint vocabulary from that seen in training, and we say that a prediction is accurate if the model continues with \texttt{y x </s>}, where \texttt{y} is any character (from the training or assessment vocabulary) except \texttt{x}.
+\Appref{sec:analyticlm} provides an analytic solution to the ABA task using this model. To see how well the model performs in practice, we trained networks on sequences \texttt{<s> a b a </s>}, where $\texttt{b} \neq \texttt{a}$. We show the network every such sequence during training, from an underlying vocabulary of 20 items (creating a total of 380 examples). To assess how well the model learns this pattern, we seed it with \texttt{<s> x} where \texttt{x} is an item from a disjoint vocabulary from that seen in training, and we say that a prediction is accurate if the model continues with \texttt{y x </s>}, where \texttt{y} is any character (from the training or assessment vocabulary) except \texttt{x}. 
 
 \subsection{Results}
 
-\Figref{fig:fuzzy-lm-results} shows the results for a model with a 100-dimensional hidden representation. As before, the results are comparable for smaller networks. Unlike for the previous equality experiments, we found that we had to allow the model to experience multiple epochs of training on the same set in order to succeed. \figref{fig:fuzzy-lm-pretrain-results} shows results with pretrained representations across a range of different tasks (as in Model~1); these yielded no increase in performance.
+\Figref{fig:fuzzy-lm-pretrain-results} shows our results. Unlike for the previous equality experiment, we found that we had to allow the model to experience multiple epochs of training on the same set in order to succeed and tens of thousands of training examples are necessary. We consider a range of representations (as in Model~1); the model was again successful with all representations, but in this experiment pretraining representations did not increase performance.
 % , and hence the x-axis counts examples in terms of epochs of learning on our fixed set of 380 examples.  % MCF; not correct anymore right?
 
 
 
 \subsection{Discussion}
 
-These sequential models are given no negative examples and they must predict into a totally new vocabulary. Despite these challenges, they succeed at learning the underlying patterns in our data. On the other hand, the learning process is slow and data-intensive. We hypothesized that grounding representations in property domains via pretraining might lead to noticeable speed-ups, as it did in for our simple same-different task, but we did not see this effect in practice. We speculate that there may be model variants that reduce these demands, given that learning is in principle possible in this architecture, but we did not discover them and leave them to future work.
+These sequential models are given no negative examples and they must predict into a totally new vocabulary. Despite these challenges, they succeed at learning the underlying patterns in our data. On the other hand, the learning process is slow and data-intensive. We hypothesized that grounding representations in property domains via pretraining might lead to noticeable speed-ups, as it did in for our simple same-different task, but we did not see this effect in practice. We speculate that there may be model variants that reduce these demands, given that learning is in principle possible in this architecture, but we leave them to future work.
 
 \section{Model 3: Hierarchical same--different relations}\label{sec:premack}
 
 Given the strong results found for simple equality relations, we can ask whether more challenging equality problems are also learnable in our setting. The hierarchical equality task used by \cite{Premack:1983} is an interesting test case: given a pairs of pairs $((a,b), (c,d))$, the label is $1$ if $(a = b) = (c = d)$, else $0$. \cite{Premack:1983} suggested that the ability exemplified by this task -- reasoning about hierarchical \emph{same} and \emph{different} relations -- could represent a form of symbolic abstraction uniquely enabled by language. Given the non-symbolic nature of our models, our simulations provide a test of this hypothesis, though we should look critically at their ability to find good solutions with reasonable amounts of training data.
 
+
 \begin{figure*}[tp]
 \centering
 \begin{subfigure}[t]{0.48\linewidth}
  \centering
- \includegraphics[width=1\linewidth]{../fig/flatpremack-h2-train_size-embed_dim-hidden_dim=100.pdf}
- \caption{Results for a network with two 100-dimensional hidden layers. Nearly all the networks solve the task, but they require very large training sets to do so.}
- \label{fig:premack-h2-flat-results}
-\end{subfigure}
-\hfill
-\begin{subfigure}[t]{0.48\linewidth}
- \centering
  \includegraphics[width=1\linewidth]{../fig/flatpremack-h2-pretrain-compare-train_size-pretrained-embed_dim=None.pdf}
- \caption{Results from pre-trained networks, adopting the best of the models at left (10-dimensional embeddings, 100-dimensional hidden representations).}
+ \caption{Results for two layer feed-forward neural networks trained on our hierarchical equality task. The 'no pretraining' model is provided random representations and the 'k-task pretraining' models are provided random representations are grounded in $k$ binary property domains via pretraining learning tasks. }
  \label{fig:premack-h2-pretrain}
 \end{subfigure}
-\caption{Hierarchical same--different results with and without pretraining.}
+\hfill
+\begin{subfigure}[t]{0.48\textwidth}
+\includegraphics[width=1\linewidth]{../fig/input-as-output-pretrain-compare-train_size-pretrained-embed_dim=None.pdf}
+\caption{Results for simple equality networks applied to the hierarchical equality task. The 'no pretraining' model is provided random representations and the 'k-task pretraining' models are provided random representations are grounded in $k$ binary property domains via pretraining learning tasks. 
+%Even with no additional training instances for this task, all models achieve greater than chance accuracy, and even modest amounts of additional training on the task lead to excellent performance.
+}
+\label{fig:premack-pretraining-results}
+\end{subfigure}
 \end{figure*}
+%\begin{figure*}[tp]
+%\centering
+%\begin{subfigure}[t]{0.48\linewidth}
+% \centering
+% \includegraphics[width=1\linewidth]{../fig/flatpremack-h2-train_size-embed_dim-hidden_dim=100.pdf}
+% \caption{Results for a network with two 100-dimensional hidden layers. Nearly all the networks solve the task, but they require very large training sets to do so.}
+% \label{fig:premack-h2-flat-results}
+%\end{subfigure}
+%\hfill
+%\begin{subfigure}[t]{0.48\linewidth}
+% \centering
+% \includegraphics[width=1\linewidth]{../fig/flatpremack-h2-pretrain-compare-train_size-pretrained-embed_dim=None.pdf}
+% \caption{Results from pre-trained networks, adopting the best of the models at left (10-dimensional embeddings, 100-dimensional hidden representations).}
+% \label{fig:premack-h2-pretrain}
+%\end{subfigure}
+%\caption{Hierarchical same--different results with and without pretraining.}
+%\end{figure*}
 
-\subsection{Model}
-
-We can approach this task using the same model and methods as we used for equality. The only change required to equations \dasheg{eq:x2h}{eq:h2y} is that we create inputs $[a;b;c;d]$: the flat concatenation of all the elements of the two pair of vectors. This change in turn leads $W_{xh}$ to have dimensionality $4m \times n$.
-
-These models are able to find nearly perfect solutions, but vastly more training data is required for this task than was required for simple equality, and the network configuration matters much more. For example, our model with 10-dimensional entity representations and 100-dimensional hidden representations reached near perfect accuracy, but only with over 95,000 training instances. A comparable model with 50-dimensional entity representations failed to get traction at all with this amount of training data, and pretraining led to only minor improvements. \Appref{app:model1-premack} provides a full picture of these learning trends.
-
-% MCF: I was confused about the numbers in the paragraph above compared with the graph. it looks like we're graphing examples, not epochs, but 95k is not necessary for any of the architectures shown...
-
-We hypothesized that the flat input representations $[a;b;c;d]$ might be suboptimal here. This task is intuitively hierarchical: if one works out the equality labels for each of the two pairs, then the further classification decision can be done entirely on that basis. Our current neural network might be too shallow to find this kind of decomposition. To address this, we can simply add another intermediate layer:
-%
-\begin{align}
-h_{1} &= \ReLU([a;b;c;d]W_{xh} + b_{h_{1}}) \label{eq:x2h1}\\
-h_{2} &= \ReLU(h_{1}W_{hh} + b_{h_{2}}) \label{eq:x2h2}\\
-y &= \softmax(h_{2}W_{hy} + b_{y}) \label{eq:h2y2}
-\end{align}
-
+We can approach this task using the same model and methods as we used for equality, with the insubstantial change of providing the network four vector representations instead of two. We found that single layered feed-forward neural networks required nearly 100,000 training examples to solve this task.  We hypothesized that the flat input representations $[a;b;c;d]$ might be suboptimal here. This task is intuitively hierarchical: if one works out the equality labels for each of the two pairs, then the further classification decision can be done entirely on that basis. Our current neural network might be too shallow to find this kind of decomposition. To address this, we use a two layer feed forward network. 
 
 \subsection{Results}
 
-\Figref{fig:premack-h2-flat-results} shows that these deeper networks learn faster and are more robust to different network configurations than the single-layer variant. Intuitively, these models are better structured to find hierarchical solutions to this hierarchical problem. Pretraining led to further gains in training speed (\figref{fig:premack-h2-pretrain}).
+\Figref{fig:premack-h2-pretrain} shows our results. We again consider a range of representations and again the network succeeds across this range, with pretraining increasing performance as in Model~1. The network required more than 20,000 training instances to reach top performance and upwards of 10,000 examples with pretrained representations.
 
 
 \subsection{Discussion}
 
-These results are encouraging, but we still require more than 20,000 training instances to reach top performance and upwards of 10,000 examples even with pretrained representations. This amount is still vastly more data than human participants get in similar experiments, which typically involve short exposures in the range of dozens to hundreds of examples \cite[e.g.,][]{marcus:1999,endress2005}. Thus, it is worth asking whether there are other solutions that would be more data efficient and more in line with human capabilities. We next sought to capitalize even more on the hierarchical nature of this task by defining a modular pretraining regime in which previously learned capabilities are recruited for new tasks.
+This amount of training data is still vastly more data than human participants get in similar experiments, which typically involve short exposures in the range of dozens to hundreds of examples \cite[e.g.,][]{marcus:1999,endress2005}. Thus, it is worth asking whether there are other solutions that would be more data efficient and more in line with human capabilities. We next sought to capitalize even more on the hierarchical nature of this task by defining a modular pretraining regime in which previously learned capabilities are recruited for new tasks.
 
 \subsection{The critical role of experience}\label{sec:modular}
 
 Our successful results training neural networks on simple equality suggested another strategy for solving the hierarchical equality task. Rather than requiring our networks to find solutions from scratch, we pretrained them on basic equality tasks and then used those parameters as a starting point for learning hierarchical equality. This set of simulations was conceptually similar to our previous experiments with pretrained input representations, but now we pretrained an entire subpart of the model, rather than just input representations.
 
-\subsubsection{Model}
+The hierarchical equality task requires computing the equality relation three times: compute whether each pair of inputs are equal and then compute whether the truth-valued outputs of these first two computations are equal. We propose to use the same network pretrained on basic equality to perform all three equality computations. 
 
-The hierarchical equality task requires computing the equality relation three times: compute whether the first two inputs are equal, compute whether the second two inputs are equal, then compute whether the truth-valued outputs of these first two computations are equal. We propose to use the same network pretrained on basic equality to perform all three equality computations. More precisely, we define
-%
-\begin{align}
-h_1 &= \ReLU([a;b]W_{xh} + b_{h})\\
-h_2 &= \ReLU([c;d]W_{xh} + b_{h})\\
-h_3 &= \ReLU([h_1;h_2]W_{xh} + b_{h}) \\
-y &= \softmax(h_3W_{hy} + b_{y})
-\end{align}
-%
-where $W_{xh}$, $W_{hy}$, $b_h$, and $b_y$ are the parameters from the model in equations \dasheg{eq:x2h}{eq:h2y} already trained on basic equality. Crucially, the same parameters, $W_{xh}$ and $b_h$, are used three times: twice to compute representations encoding whether a pair of input entities are equal ($h_1$, $h_2$), and once to compute a representation ($h_{3}$) encoding whether the truth values encoded by $h_1$ and $h_2$ are equal. This final representation is then used to compute a probability distribution over two classes, and the class with the higher probability is predicted by the model.
-
-\begin{figure*}[tp]
-\centering
-\begin{subfigure}[t]{0.48\textwidth}
-\includegraphics[width=1\linewidth]{../fig/input-as-output-train_size-embed_dim-hidden_dim=0.pdf}
-\caption{Basic equality networks applied to the hierarchical equality task. Each line represents a different embedding dimensionality, which is constrained in this model to match the hidden dimensionality. Even with no additional training instances for this task, all models achieve greater than chance accuracy, and even modest amounts of additional training on the task lead to excellent performance.
-}
-\label{fig:premack-pretraining-results}
-\end{subfigure}
-\hfill
-\begin{subfigure}[t]{0.48\textwidth}
- \centering
- \includegraphics[width=1\linewidth]{../fig/input-as-output-zero-shot.pdf}
- \caption{\update{The results from the plot at left where the x-axis is 0, that is, where we are testing zero-shot generalization from the pretrained equality network to the hierarchical setting. All the models perform well above chance in this setting, with the 50-dimensional version achieving a mean of 67\% accuracy.}}
- \label{fig:premack-pretraining-zero-shot-results}
-\end{subfigure}
-\caption{Modular network results for the hierarchical same--different task.}
-\label{fig:modular-results}
-\end{figure*}
+%\begin{figure*}[tp]
+%\centering
+%\begin{subfigure}[t]{0.48\textwidth}
+%\includegraphics[width=1\linewidth]{../fig/input-as-output-train_size-embed_dim-hidden_dim=0.pdf}
+%\caption{Basic equality networks applied to the hierarchical equality task. Each line represents a different embedding dimensionality, which is constrained in this model to match the hidden dimensionality. Even with no additional training instances for this task, all models achieve greater than chance accuracy, and even modest amounts of additional training on the task lead to excellent performance.
+%}
+%\label{fig:premack-pretraining-results}
+%\end{subfigure}
+%\hfill
+%\begin{subfigure}[t]{0.48\textwidth}
+% \centering
+% \includegraphics[width=1\linewidth]{../fig/input-as-output-zero-shot.pdf}
+% \caption{\update{The results from the plot at left where the x-axis is 0, that is, where we are testing zero-shot generalization from the pretrained equality network to the hierarchical setting. All the models perform well above chance in this setting, with the 50-dimensional version achieving a mean of 67\% accuracy.}}
+% \label{fig:premack-pretraining-zero-shot-results}
+%\end{subfigure}
+%\caption{Modular network results for the hierarchical same--different task.}
+%\label{fig:modular-results}
+%\end{figure*}
 
 \subsubsection{Results and discussion}
 
-\Figref{fig:modular-results} shows that this model succeeds very quickly at the hierarchical equality task. As we see in \figref{fig:premack-pretraining-results}, after just a few thousand examples, the majority of the model configurations perform with near perfect accuracy. The findings in \figref{fig:premack-pretraining-zero-shot-results} are even more striking: all the models have above chance performance after being trained only on the simple equality task -- that is, they achieve zero-shot generalization to the hierarchical task. It is remarkable that a model trained only on equality between entities is able to get traction on a problem that requires determining whether equality holds between the truth values encoded in two learned representations.
+\Figref{fig:premack-pretraining-results} shows our results. All the models have above chance performance after being trained only on the simple equality task -- that is, they achieve zero-shot generalization to the hierarchical task and after just a couple thousand examples, the models achieve with near perfect accuracy. It is remarkable that a model trained only on equality between entities is able to get traction on a problem that requires determining whether equality holds between the truth values encoded in two learned representations. Pretrained representations did not increase performance.
 
-It might be possible to effectively combine network pretraining with input pretraining as in the previous experiments. An initial exploration of this idea is presented in \appref{app:double-pretrain}. While we have not yet found a way to use this combination of pretraining regimes to improve over \figref{fig:modular-results}, we are optimistic about such combinations for future work.
+%It might be possible to effectively combine network pretraining with input pretraining as in the previous experiments. An initial exploration of this idea is presented in \appref{app:double-pretrain}. While we have not yet found a way to use this combination of pretraining regimes to improve over \figref{fig:modular-results}, we are optimistic about such combinations for future work.
 
 \section{General Discussion}
 
@@ -645,3 +557,7 @@ Earlier debates about the nature of equality computations centered around the qu
 }{
   \input{footer-arxiv}
 }
+% \update{
+
+% As noted above, this is an unusual formulation for a language model. The usual version essentially treats every timestep as involving a classification decision, with a cross-entropy loss. We cannot adopt this because of our goal of using unseen vocabulary items at test time. % MCF: seemed redundant
+
