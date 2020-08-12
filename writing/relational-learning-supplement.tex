@@ -1,54 +1,54 @@
 %\input{pre-pnas-supp}
 
-\section{Model 1 Supplementary Methods}
+%\section{Model 1 Supplementary Methods}
 
-The input to our model is a pair of vectors $(a, b)$, each of dimension $m$, which correspond to the two stimulus objects. These vectors are non-featural representations that do not have features encoding properties of the objects or their identity. These are concatenated to form a single vector $[a;b]$ of dimension $2m$, which is the simplest way of merging the two representations to form a single input.
+%The input to our model is a pair of vectors $(a, b)$, each of dimension $m$, which correspond to the two stimulus objects. These vectors are non-featural representations that do not have features encoding properties of the objects or their identity. These are concatenated to form a single vector $[a;b]$ of dimension $2m$, which is the simplest way of merging the two representations to form a single input.
 
-This representation is multiplied by a matrix of weights $W_{xh}$ of dimension $2m \times n$ and a bias vector $b_{h}$ of dimension $n$ is added to this result, where $n$ is the hidden layer dimensionality. These two steps create a linear projection of the input representation, and the bias term is the value of this linear projection when the input representation is the zero vector. Then, the non-linear activation function $\ReLU$ ($\ReLU(x) = \max(0, x)$) is applied element-wise to this linear projection. This non-linearity is what gives the neural model more expressive power than a logistic regression \citep{Cybenko:1989,Hornik:Stinchcombe:White:1989}. The result is the hidden representation $h$.
+%This representation is multiplied by a matrix of weights $W_{xh}$ of dimension $2m \times n$ and a bias vector $b_{h}$ of dimension $n$ is added to this result, where $n$ is the hidden layer dimensionality. These two steps create a linear projection of the input representation, and the bias term is the value of this linear projection when the input representation is the zero vector. Then, the non-linear activation function $\ReLU$ ($\ReLU(x) = \max(0, x)$) is applied element-wise to this linear projection. This non-linearity is what gives the neural model more expressive power than a logistic regression \citep{Cybenko:1989,Hornik:Stinchcombe:White:1989}. The result is the hidden representation $h$.
 
-The hidden representation is the input to the classification layer: $h$ is multiplied by a second matrix of weights $W_{hy}$, dimension $n \times 2$, and a bias term $b_{y}$ (dimension 2) is added to this. This second bias term encodes the probabilities of each class when the hidden representation is 0. The result is fed through the softmax activation function: $\softmax(x)_{i} = \frac{\exp{x_{i}}}{\sum_{j} \exp{x_{j}}}$. This creates a probability distribution over the classes (positive and negative). For a given input, the model computes this probability distribution and the input is categorized as the class with the higher probability.
+%The hidden representation is the input to the classification layer: $h$ is multiplied by a second matrix of weights $W_{hy}$, dimension $n \times 2$, and a bias term $b_{y}$ (dimension 2) is added to this. This second bias term encodes the probabilities of each class when the hidden representation is 0. The result is fed through the softmax activation function: $\softmax(x)_{i} = \frac{\exp{x_{i}}}{\sum_{j} \exp{x_{j}}}$. This creates a probability distribution over the classes (positive and negative). For a given input, the model computes this probability distribution and the input is categorized as the class with the higher probability.
 
-During training, this model is presented with positive and negative labeled examples and the parameters $W_{xh}$, $W_{hy}$, $b_{y}$, and $b_{h}$ are learned using back propagation with a cross entropy function. \update{This function is defined as follows, for a set of $N$ examples and $K$ classes:
+%During training, this model is presented with positive and negative labeled examples and the parameters $W_{xh}$, $W_{hy}$, $b_{y}$, and $b_{h}$ are learned using back propagation with a cross entropy function. \update{This function is defined as follows, for a set of $N$ examples and $K$ classes:
 %
-\begin{equation}
-\max(\theta)
-\quad
-\frac{1}{N}
-\sum_{i=1}^{N}
-\sum_{k=1}^{K}
-y^{i,k} \log(h_{\theta}(i)^{k})
-\end{equation}
+%\begin{equation}
+%\max(\theta)
+%\quad
+%\frac{1}{N}
+%\sum_{i=1}^{N}
+%\sum_{k=1}^{K}
+%y^{i,k} \log(h_{\theta}(i)^{k})
+%\end{equation}
 %
-where $\theta$ abbreviates the model parameters ($W_{xh}$, $W_{hy}$, $b_{y}$, $b_{h}$), $y^{i,k}$ is the actual label for example $i$ and class $k$, and $h_{\theta}(i)^{k}$ is the corresponding prediction.}
+%where $\theta$ abbreviates the model parameters ($W_{xh}$, $W_{hy}$, $b_{y}$, $b_{h}$), $y^{i,k}$ is the actual label for example $i$ and class $k$, and $h_{\theta}(i)^{k}$ is the corresponding prediction.}
 
 
-\section{Model 2 Supplementary Methods}
+%\section{Model 2 Supplementary Methods}
 
-The input to this model is a sequence of vectors $x_1, x_2, x_3, \dots$, each of dimension $m$, which correspond to a sequence of stimulus objects. These vectors are, again, non-featural representations that do not have features encoding properties of the objects or their identity.
+%The input to this model is a sequence of vectors $x_1, x_2, x_3, \dots$, each of dimension $m$, which correspond to a sequence of stimulus objects. These vectors are, again, non-featural representations that do not have features encoding properties of the objects or their identity.
 
 
-At each timestep $t$, the input vector $x_t$ is fed into the $\LSTM$ cell along with the previous hidden representation $h_{t-1}$. The defining feature of an $\LSTM$ is the ability to decide whether to store information from the current input, $x_t$, and whether to remember or forget the information from the previous timestep $h_{t-t}$. The output of the $\LSTM$ cell is the hidden representation for the current time step $h_t$. The dimension of the hidden representations is $n$. The hidden representation is multiplied by a matrix $W$ with dimensionality $n \times m$ to produce $y_t$. This result, $y_t$, is a linear projection of the hidden representation into the input vector space, which is necessary because $y_t$ is a prediction of what the next input, $x_{t+1}$, will be.
+%At each timestep $t$, the input vector $x_t$ is fed into the $\LSTM$ cell along with the previous hidden representation $h_{t-1}$. The defining feature of an $\LSTM$ is the ability to decide whether to store information from the current input, $x_t$, and whether to remember or forget the information from the previous timestep $h_{t-t}$. The output of the $\LSTM$ cell is the hidden representation for the current time step $h_t$. The dimension of the hidden representations is $n$. The hidden representation is multiplied by a matrix $W$ with dimensionality $n \times m$ to produce $y_t$. This result, $y_t$, is a linear projection of the hidden representation into the input vector space, which is necessary because $y_t$ is a prediction of what the next input, $x_{t+1}$, will be.
 
 % \update{
-The objective function is as follows:
+%The objective function is as follows:
 %
-\begin{equation}
-\max(\theta)
-\quad
--\frac{1}{N}
-\sum_{i=1}^{N}
-\sum_{t=1}^{T_{i}}
-\left\| h_{\theta}\left(x^{i, 0:{t-1}}\right) - x^{i,t} \right\|^{2}
-\end{equation}
+%\begin{equation}
+%\max(\theta)
+%\quad
+%-\frac{1}{N}
+%\sum_{i=1}^{N}
+%\sum_{t=1}^{T_{i}}
+%\left\| h_{\theta}\left(x^{i, 0:{t-1}}\right) - x^{i,t} \right\|^{2}
+%\end{equation}
 %
-for $N$ examples. Here, $T_{i}$ is the length of example $i$. As before, $\theta$ abbreviates the parameters of the model as specified in \dasheg{eq:lstm-recur}{eq:lstm-predict}. We use $h_{\theta}(x^{i, 0:{t-1}})$ for the vector predicted by the model for example~$i$ at timestep~$t$, which is compared to the actual vector at timestep $t$ via squared Euclidean distance (i.e., the mean squared error).
+%for $N$ examples. Here, $T_{i}$ is the length of example $i$. As before, $\theta$ abbreviates the parameters of the model as specified in \dasheg{eq:lstm-recur}{eq:lstm-predict}. We use $h_{\theta}(x^{i, 0:{t-1}})$ for the vector predicted by the model for example~$i$ at timestep~$t$, which is compared to the actual vector at timestep $t$ via squared Euclidean distance (i.e., the mean squared error).
 % As noted above, this is an unusual formulation for a language model. The usual version essentially treats every timestep as involving a classification decision, with a cross-entropy loss. We cannot adopt this because of our goal of using unseen vocabulary items at test time. % MCF: seemed redundant
 
 
-\section{Model figures}
+\section{Model Details}
 
 
-\subsection{Model 1: Same--different relation with feed-foward  networks}\label{sec:model1}
+\subsection{Model 1: Same--different relation with feed-forward  networks}\label{sec:model1}
 
 Our model of equality is given by \dasheg{eq:x2h-supp}{eq:h2y-supp}:
 %
@@ -57,7 +57,7 @@ Our model of equality is given by \dasheg{eq:x2h-supp}{eq:h2y-supp}:
   y &= \softmax(hW_{hy} + b_{y}) \label{eq:h2y-supp}
 \end{align}
 %
-The input is a pair of vectors $(a,b)$, each of dimension $m$, which correspond to two stimulus objects. These vectors are non-featural representations that do not hav efeatures encoding properties of the objects or their identities. These are concatenated to form a single vector $[a;b]$ of dimension $2m$, which is the simplest way of merging the two representations to form a single input.
+The input is a pair of vectors $(a,b)$, each of dimension $m$, which correspond to two stimulus objects. These vectors are non-featural representations that do not have features encoding properties of the objects or their identities. These are concatenated to form a single vector $[a;b]$ of dimension $2m$, which is the simplest way of merging the two representations to form a single input.
 
 This representation is multiplied by a matrix of weights $W_{xh}$ of dimension $2m \times n$ and a bias vector $b_{h}$ of dimension $n$ is added to this result, where $n$ is the hidden layer dimensionality. These two steps create a linear projection of the input representation, and the bias term is the value of this linear projection when the input representation is the zero vector. Then, the non-linear activation function $\ReLU$ ($\ReLU(x) = \max(0, x)$) is applied element-wise to this linear projection. This non-linearity is what gives the neural model more expressive power than a logistic regression \citep{Cybenko:1989,Hornik:Stinchcombe:White:1989}. The result is the hidden representation $h$.
 
@@ -76,7 +76,7 @@ y^{i,k} \log(h_{\theta}(i)^{k})
 %
 where $\theta$ abbreviates the model parameters ($W_{xh}$, $W_{hy}$, $b_{y}$, $b_{h}$), $y^{i,k}$ is the actual label for example $i$ and class $k$, and $h_{\theta}(i)^{k}$ is the corresponding prediction.}
 
-\Figref{fig:models:equality} provides a visual depiction of the model. The gray boxes correspond to embedding representations, the purple box is the hidden representation $h$, and the red box is the output distribution $y$. Dotted arrows depict concatenation, and solid arrows depict the dense relations corresponding to the matrix multiplications (plus bias terms) in \dasheg{eq:x2h}{eq:h2y}.
+\Figref{fig:models:equality} provides a visual depiction of the model. The gray boxes correspond to embedding representations, the purple box is the hidden representation $h$, and the red box is the output distribution $y$. Dotted arrows depict concatenation, and solid arrows depict the dense relations corresponding to the matrix multiplications (plus bias terms) in \dasheg{eq-supp:x2h}{eq-supp:h2y}.
 
 \begin{figure}[H]
   \centering
@@ -160,7 +160,7 @@ The specific model we use for this is as follows:
   y_{t} &= h_{t}W + b\label{eq:lstm-predict-supp}
 \end{align}
 %
-This holds for $t > 0$, and we set $h_{0} = \mathbf{0}$. $\LSTM$ is a long short-term memory cell \cite{hochreiter:1997}. Full details on these cells are given in \appref{sec:analyticlm}.
+This holds for $t > 0$, and we set $h_{0} = \mathbf{0}$. $\LSTM$ is a long short-term memory cell \cite{hochreiter:1997}.
 
 The input is a sequence of vectors $x_1, x_2, x_3, \dots$, each of dimension $m$, which correspond to a sequence of stimulus objects. These vectors are, again, non-featural representations that do not have features encoding properties of the objects or their identity.
 
@@ -526,7 +526,7 @@ where $E[i]$ is the vector representation for example $i$ in the embedding matri
   y^{i,j,k} \log \left( h_{\theta}(i)^{j,k} \right)
 \end{equation}
 %
-where $y^{i,j,k}$ is the correct label for example $i$ in task $j$ and $p^{i,j,k}$ is the predicted value for example $i$ in task $j$.
+where $y^{i,j,k}$ is the correct label for example $i$ in task $j$ and $h_{\theta}(i)^{j,k}$ is the predicted value for example $i$ in task $j$.
 
 For the experiments in the paper, we initialize $E$ randomly and then, for pretraining on $J$ tasks, we create a random binary vector of length $J$ for each row in $E$. Each dimension (task) in $J$ is independent of the others.
 
@@ -663,21 +663,21 @@ The gates at the first time step are easy to compute, as the cell state and hidd
 Then we compute the cell and hidden states at the first timestep. The cell state encodes the information of the input vector, so it can be used to recover the vector at a later time step and receives no information from the previous cell state despite the forget gate being open, because the previous cell state is a zero vector. The hidden state is the cell state scaled by one half.
 %
 \begin{align*}
-  c_1 &= \textbf{N}_d\circ \textbf{0}_d+ \\
+  c_1 &= \textbf{1}_d\circ \textbf{0}_d+ \\
       & \textbf{1}_d \circ \ReLU\left(x_1\begin{bmatrix} 0 &  & \\ \vdots & -I_{n \times n} & I_{n \times n}\\ 0 & &  \end{bmatrix} + \begin{bmatrix} N & 0 \dots 0\end{bmatrix}\right) \\
       & = \ReLU\left( \begin{bmatrix} N & -x_1 & x_1 \end{bmatrix}\right) \\[1ex]
   h_1 &= \textbf{0.5}_d\ReLU \left(\ReLU( \begin{bmatrix} N & -x_1 & x_1 \end{bmatrix})\right) \\
       &= \textbf{0.5}_d\circ \ReLU( \begin{bmatrix} N & -x_1 & x_1 \end{bmatrix})
 \end{align*}
 %
-At the next time step, the forget gate remains fully open, the open gate changes from partially open to fully open, and the input gate changes from fully open to fully closed:
+At the next time step, the forget gate remains fully open, the output gate changes from partially open to fully open, and the input gate changes from fully open to fully closed:
 %
 \begin{align*}
-  f_2 &= \textbf{N}_d \\[2ex]
-  o_2 &= \sigma(y_1\textbf{0}_{n\times d} + h_{1}\begin{bmatrix} 1 \dots 1 \\ \textbf{0}_{2n\times n} \end{bmatrix}  + \textbf{0}_d) \\
+  f_2 &= \textbf{1}_d \\[2ex]
+  o_2 &= \sigma(x_2\textbf{0}_{n\times d} + h_{1}\begin{bmatrix} 1 \dots 1 \\ \textbf{0}_{2n\times n} \end{bmatrix}  + \textbf{0}_d) \\
   &= \sigma(\textbf{0.5}_d\circ \ReLU\left( \begin{bmatrix} N & -x_1 & x_1 \end{bmatrix}\right)\begin{bmatrix} 1 \dots 1 \\ \textbf{0}_{2n\times n} \end{bmatrix}  + \textbf{0}_d)  \\
   &=  \sigma(\textbf{0.5}_d\circ \textbf{N}_d) \approx \textbf{1}_d \\[2ex]
-  i_2 &= \sigma(y_1\textbf{0}_{n\times d} + h_{1}\begin{bmatrix} -4 \dots -4 \\ \textbf{0}_{2n\times n} \end{bmatrix}  + \textbf{N}_d)  \\
+  i_2 &= \sigma(x_2\textbf{0}_{n\times d} + h_{1}\begin{bmatrix} -4 \dots -4 \\ \textbf{0}_{2n\times n} \end{bmatrix}  + \textbf{N}_d)  \\
   &= \sigma(\textbf{0.5}_d\circ \ReLU\left( \begin{bmatrix} N & -x_1 & x_1 \end{bmatrix}\right)\begin{bmatrix} -4 \dots -4 \\ \textbf{0}_{2n\times n} \end{bmatrix}  + \textbf{N}_d)   \\
   &=  \sigma(\textbf{0.5}_d\circ\textbf{-4N}_d + \textbf{N}_d) \approx \textbf{0}_d
 \end{align*}
@@ -711,7 +711,7 @@ Then, because $y_1 = \textbf{0.5}_d\circ x_1 \not = x_1$ and $y_2 = x_1$, this n
 
 \subsection{Model 1 for basic same--different}\label{app:model1-results}
 
-\Figref{fig:model1} explores a wider range of hidden dimensionalities for Model~1 applied to the basic same--differerent task. As in the paper, the lines correspond to different embedding dimensionalities. \Figref{fig:model1-rep} is repeated from \figref{fig:equality--smallresults}.
+\Figref{fig:model1} explores a wider range of hidden dimensionalities for Model~1 applied to the basic same--differerent task. As in the paper, the lines correspond to different embedding dimensionalities.
 
 \begin{figure}[H]
   \centering
@@ -755,7 +755,7 @@ Then, because $y_1 = \textbf{0.5}_d\circ x_1 \not = x_1$ and $y_2 = x_1$, this n
 
 \subsection{Model 2 for sequential same--different}
 
-\Figref{fig:model2} explores a wider range of hidden dimensionalities for Model~2 applied to the sequential ABA task. As in the paper, the lines correspond to different embedding dimensionalities. The full training set is presented to the model in multiple epochs. \Figref{fig:model2-rep} is repeated from \figref{fig:fuzzy-lm-pretrain-results}.
+\Figref{fig:model2} explores a wider range of hidden dimensionalities for Model~2 applied to the sequential ABA task. As in the paper, the lines correspond to different embedding dimensionalities. The full training set is presented to the model in multiple epochs.
 
 \begin{figure}[H]
   \centering
@@ -798,7 +798,7 @@ Then, because $y_1 = \textbf{0.5}_d\circ x_1 \not = x_1$ and $y_2 = x_1$, this n
 \newpage
 
 
-\subsection{Model 1 for hierarchical same--different}\label{app:model1-premack}
+\subsection{Model 3a for hierarchical same--different}\label{app:model1-premack}
 
 \Figref{fig:model1:premack} shows the results of applying the model in \dasheg{eq:x2h-supp}{eq:h2y-supp} to the hierarchical same--different task. The only change from that model is that the inputs have dimensionality $4m$, since the four distinct representations in task inputs are simply concatenated.
 
@@ -842,9 +842,9 @@ Then, because $y_1 = \textbf{0.5}_d\circ x_1 \not = x_1$ and $y_2 = x_1$, this n
 \newpage
 
 
-\subsection{Model 3a for hierarchical same--different}
+\subsection{Model 3b for hierarchical same--different}
 
-\Figref{fig:model3a} shows the results of applying the model in \dasheg{eq:x2h1-supp}{eq:h2y2-supp} to the hierarchical same--different task. \Figref{fig:model3a-rep} is repeated from \figref{fig:premack-h2-flat-results}.
+\Figref{fig:model3a} shows the results of applying the model in \dasheg{eq:x2h1-supp}{eq:h2y2-supp} to the hierarchical same--different task.
 
 \begin{figure}[H]
   \centering
@@ -884,15 +884,15 @@ Then, because $y_1 = \textbf{0.5}_d\circ x_1 \not = x_1$ and $y_2 = x_1$, this n
 
 \newpage
 
-\subsection{Pretraining input representations and equality parameters}\label{app:double-pretrain}
+%\subsection{Pretraining input representations and equality parameters}\label{app:double-pretrain}
 
-In \secref{sec:modular}, we showed that pretraining an entire basic equality network led to faster learning in the hierarchical same--different task. This kind of network pretraining can be combined with the input-level pretrained we explored elsewhere in the paper (details in \appref{app:pretraining}). \Figref{fig:double-pretrain} reports initial experiments for this combination of pretraining regimes. Although the results are not better than the ones we report in the paper, this still seems like a promising idea, though one for which optimal solutions might be hard to find.
+%In \secref{sec:modular}, we showed that pretraining an entire basic equality network led to faster learning in the hierarchical same--different task. This kind of network pretraining can be combined with the input-level pretrained we explored elsewhere in the paper (details in \appref{app:pretraining}). \Figref{fig:double-pretrain} reports initial experiments for this combination of pretraining regimes. Although the results are not better than the ones we report in the paper, this still seems like a promising idea, though one for which optimal solutions might be hard to find.
 
-\begin{figure}[H]
-  \centering
-  \includegraphics[width=0.48\textwidth]{../fig/input-as-output-pretrain-compare-train_size-pretrained-embed_dim=None.pdf}
-  \caption{Results for the hierarchical same--different task for a model in which both the input representations and the basic equality network are pretrained. The `no pretrain' model is the best one from \figref{fig:premack-pretraining-results} (25-dimensional embeddings, 100-dimensional hidden representations). The input-pretrained models use this same configuration.}
-  \label{fig:double-pretrain}
-\end{figure}
+%\begin{figure}[H]
+%  \centering
+%  \includegraphics[width=0.48\textwidth]{../fig/input-as-output-pretrain-compare-train_size-pretrained-embed_dim=None.pdf}
+%  \caption{Results for the hierarchical same--different task for a model in which both the input representations and the basic equality network are pretrained. The `no pretrain' model is the best one from \figref{fig:premack-pretraining-results} (25-dimensional embeddings, 100-dimensional hidden representations). The input-pretrained models use this same configuration.}
+%  \label{fig:double-pretrain}
+%\end{figure}
 
 \end{document}

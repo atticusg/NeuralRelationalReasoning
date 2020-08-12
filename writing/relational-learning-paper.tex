@@ -472,7 +472,7 @@ We can approach this task using the same model and methods as we used for equali
 
 \subsection{Discussion}
 
-This amount of training data is still vastly more data than human participants get in similar experiments, which typically involve short exposures in the range of dozens to hundreds of examples \cite[e.g.,][]{marcus:1999,endress2005}. Thus, it is worth asking whether there are other solutions that would be more data efficient and more in line with human capabilities. We next sought to capitalize even more on the hierarchical nature of this task by defining a modular pretraining regime in which previously learned capabilities are recruited for new tasks.
+This amount of training data is still vastly more data than human participants get in similar experiments, which typically involve short exposures in the range of dozens to hundreds of examples \cite[e.g.,][]{marcus:1999,endress2005}. Thus, it is worth asking whether there are other solutions that would be more data efficient and more in line with human capabilities. We next seek to further capitalize on the hierarchical nature of this task by defining a modular pretraining regime in which previously learned capabilities are recruited for new tasks.
 
 \subsection{The critical role of experience}\label{sec:modular}
 
@@ -501,7 +501,7 @@ The hierarchical equality task requires computing the equality relation three ti
 
 \subsubsection{Results and discussion}
 
-\Figref{fig:premack-pretraining-results} shows our results. All the models have above chance performance after being trained only on the simple equality task -- that is, they achieve zero-shot generalization to the hierarchical task and after just a couple thousand examples, the models achieve with near perfect accuracy. It is remarkable that a model trained only on equality between entities is able to get traction on a problem that requires determining whether equality holds between the truth values encoded in two learned representations. Pretrained representations did not increase performance.
+\Figref{fig:premack-pretraining-results} shows our results. All the models have above chance performance after being trained only on the simple equality task -- that is, they achieve zero-shot generalization to the hierarchical task and within two thousand examples, the models achieve near perfect accuracy. It is remarkable that a model trained only on equality between entities is able to get traction on a problem that requires determining whether equality holds between the truth values encoded in two learned representations. Pretrained representations did not increase performance.
 
 %It might be possible to effectively combine network pretraining with input pretraining as in the previous experiments. An initial exploration of this idea is presented in \appref{app:double-pretrain}. While we have not yet found a way to use this combination of pretraining regimes to improve over \figref{fig:modular-results}, we are optimistic about such combinations for future work.
 

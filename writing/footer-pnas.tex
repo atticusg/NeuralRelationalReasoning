@@ -4,33 +4,28 @@ The code and data used to run the experiments in this paper are publicly availab
 The simple equality model takes in input vectors, $a,b$, and uses a single linear transformation followed by a non-linearity to create a hidden representation $h$
 that is then used to create a probability distribution, $y$, over the two classes.
 \begin{align}
-  h &= \ReLU([a;b]W_{xh} + b_{h}) \label{eq:x2h}\\
-  y &= \softmax(hW_{hy} + b_{y}) \label{eq:h2y}
+  h &= \ReLU([a;b]W_{xh} + b_{h})  & y = \softmax(hW_{hy} + b_{y}) \label{eq:h2y}
 \end{align}
 
 The sequential equality model takes in a sequence of input vectors, $x_1,x_2,\dots$, and uses an LSTM cell to create a hidden representation $h_t$ at each timestep $t$ that is
 that is then linearly projected into the input vector space providing a prediction for that timestep, $y_t$.
 \begin{align}
-  h_{t} &= \LSTM(x_{t}, h_{t-1}) \label{eq:lstm-recur}\\
-  y_{t} &= h_{t}W + b\label{eq:lstm-predict}
+  h_{t} &= \LSTM(x_{t}, h_{t-1})  & y_{t} = h_{t}W + b\label{eq:lstm-predict}
 \end{align}
 
 The first hierarchical equality model takes in input vectors, $a,b,c,d$, and applies a linear transformation followed by a non-linearity to create a hidden representation $h_1$ and then
 applies these two steps once more to create second hidden representation $h_2$ that is then used to create a probability distribution, $y$, over the two classes.
 \begin{align}
   h_{1} &= \ReLU([a;b;c;d]W_{xh} + b_{h_{1}}) \label{eq:x2h1}\\
-  h_{2} &= \ReLU(h_{1}W_{hh} + b_{h_{2}}) \label{eq:x2h2}\\
-  y &= \softmax(h_{2}W_{hy} + b_{y}) \label{eq:h2y2}
+  h_{2} &= \ReLU(h_{1}W_{hh} + b_{h_{2}}) & \hspace{-10pt}y = \softmax(h_{2}W_{hy} + b_{y}) \label{eq:h2y2}
 \end{align}
 
-The second hierarchical equality model takes in input vectors, $a,b,c,d$, and applies the simple equality model from equations \dasheg{eq:x2h}{eq:h2y} to the pairs $(a,b)$
+The second hierarchical equality model takes in input vectors, $a,b,c,d$, and applies the simple equality model from equations \eg{eq:h2y} to the pairs $(a,b)$
 and $(c,d)$ to produce hidden representations $h_1$ and $h_2$. Then the simple equality model is applied once again to the pair $(h_1,h_2)$ to produce a final hidden representation $h_3$
 that is used to create a probability distribution, $y$, over the two classes.
 \begin{align}
-  h_1 &= \ReLU([a;b]W_{xh} + b_{h}) \label{eq:preh1}\\
-  h_2 &= \ReLU([c;d]W_{xh} + b_{h})\\
-  h_3 &= \ReLU([h_1;h_2]W_{xh} + b_{h}) \\
-  y &= \softmax(h_3W_{hy} + b_{y}) \label{eq:prey}\
+  h_1 &= \ReLU([a;b]W_{xh} + b_{h}) & h_2 = \ReLU([c;d]W_{xh} + b_{h})\\
+  h_3 &= \ReLU([h_1;h_2]W_{xh} + b_{h}) & y = \softmax(h_3W_{hy} + b_{y}) \label{eq:prey}\
 \end{align}
 
 The parameters for the simple and hierarchical equality models are learned using back propagation with a cross entropy objective function defined as follows, for a set of $N$ examples and $K$ classes:
@@ -57,7 +52,7 @@ The parameters for the sequential model are learned using back propagation with 
 \left\| h_{\theta}\left(x^{i, 0:{t-1}}\right) - x^{i,t} \right\|^{2}
 \end{equation}
 %
-for $N$ examples. Here, $T_{i}$ is the length of example $i$. As before, $\theta$ abbreviates the parameters of the model as specified in \dasheg{eq:lstm-recur-supp}{eq:lstm-predict-supp}. We use $h_{\theta}(x^{i, 0:{t-1}})$ for the vector predicted by the model for example~$i$ at timestep~$t$, which is compared to the actual vector at timestep $t$ via squared Euclidean distance.
+for $N$ examples. Here, $T_{i}$ is the length of example $i$. As before, $\theta$ abbreviates the parameters of the model. We use $h_{\theta}(x^{i, 0:{t-1}})$ for the vector predicted by the model for example~$i$ at timestep~$t$, which is compared to the actual vector at timestep $t$ via squared Euclidean distance.
 
 Hyperparameter searches and implementation details can be found in \appref{app:optimization}.
 
