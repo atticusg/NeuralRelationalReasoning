@@ -532,12 +532,12 @@ For the experiments in the paper, we initialize $E$ randomly and then, for pretr
 
 Our motivation for pretraining is to update the embedding $E$ so that its representations contain rich structure that can be used by subsequent models. To achieve this, we backpropagate errors through the network and into $E$.
 
-In our experiments, we always pretrain for 10 iterations. This choice is motivated primarily by computational costs; additional pretraining iterations greatly increase experiment run-times, though they do have the potential to imbue the representations with even more useful structure.
+In our experiments, we always pretrain for \newatticus{10 epochs where each epoch consists of an example for each item in the vocabulary}. This choice is motivated primarily by computational costs; additional pretraining \newatticus{epochs} greatly increase experiment run-times, though they do have the potential to imbue the representations with even more useful structure. \newatticus{Pretraining with the optimal hyperparameter settings always led to perfect accuracy on the pretraining tasks.}
 
 
 \section{Model optimization details}\label{app:optimization}
 
-The feed forward networks for basic and hierarchical equality were implemented using the multi-layer perception from sklearn and a cross entropy function was used to compute the prediction error. The recursive LSTM network for the sequential ABA task was implemented using PyTorch and a mean squared error function was used to compute the prediction error. The networks for pretraining representations and for the hierarchical equality task were also implemented using PyTorch, with cross-entropy loss functions used to compute the prediction errors. For all models, Adam optimizers \citep{Kingma:Ba:2015} were used. For all models, a hyperparameter search was run over learning rate values of \{0.00001, 0.0001, 0.001\} and l2 normalization values of \{0.0001, 0.001, 0.01\} for each hidden dimension and input dimension mentioned in the paper.
+The feed forward networks for basic and hierarchical equality were implemented using the multi-layer perception from sklearn and a cross entropy function was used to compute the prediction error. The recursive LSTM network for the sequential ABA task was implemented using PyTorch and a mean squared error function was used to compute the prediction error. The networks for pretraining representations and for the hierarchical equality task were also implemented using PyTorch, with cross-entropy loss functions used to compute the prediction errors. For all models, Adam optimizers \citep{Kingma:Ba:2015} were used. For all models, we used a batch size of 200 and ran a hyperparameter search over learning rate values of \{0.00001, 0.0001, 0.001\} and l2 normalization values of \{0.0001, 0.001, 0.01\} for each hidden dimension and input dimension. \newatticus{We considered hidden dimensions of \{2, 10, 25, 50, 100\} and input dimensions of \{2, 10, 25, 50, 100\}. In the main text, we graph results for the single best hyperparameter setting. Later in the supplemental material under the heading 'Additional results plots', we show how model performance is affected by changes in hidden dimmensionality and input dimensionality.} 
 
 
 \section{Localist and binary feature representations prevent generalization}\label{app:generalization}
@@ -548,9 +548,9 @@ In order to discuss how representation impacts generalization, we will need expl
 
 Localist representations are orthogonal and equidistant from one another so there is no notion of similarity and consequently standard neural models have no ability to generalize to new examples. No two representations share a non-zero unit, and so when models are presented with inputs unseen in training, untrained weights are used and the resulting behavior is again unpredictable.
 
-Distributed representations with binary features also limit generalization, though less severely than localist representations. Localist representations prevent generalization to entities unseen during training, while binary feature representations prevent generalization to features unseen during training. For example, if color and shape are represented as binary features, and a red square and blue circle are seen in training, then a model could generalize to the unseen entities of a blue circle or a red square. However, if no entity that is a circle is seen during training, then the binary feature representing the property of being a circle is zero throughout training and untrained weights are used when the model is presented with a entity that is a circle during testing, which results in unpredictable behavior.
+Property representations with binary features also limit generalization, though less severely than localist representations. Localist representations prevent generalization to entities unseen during training, while binary feature representations prevent generalization to features unseen during training. For example, if color and shape are represented as binary features, and a red square and blue circle are seen in training, then a model could generalize to the unseen entities of a blue circle or a red square. However, if no entity that is a circle is seen during training, then the binary feature representing the property of being a circle is zero throughout training and untrained weights are used when the model is presented with a entity that is a circle during testing, which results in unpredictable behavior.
 
-Distributed representations with analog features do not inhibit generalization in the same way. If height is represented as a binary feature, then a single unit represents all height values and is always non-zero. Non-featural representations similarly do not inhibit generalization, because all units for all representations are non-zero and the network can learn parameters that create complex associations between these entities and its task labels.
+Property representations with analog features do not inhibit generalization in the same way. If height is represented as an analog feature, then a single unit represents all height values and is always non-zero. Non-featural representations similarly do not inhibit generalization, because all units for all representations are non-zero and the network can learn parameters that create complex associations between these entities and its task labels.
 
 
 \section{An analytic solution to identity with a feed forward network}\label{app:equality-solution}
@@ -711,7 +711,7 @@ Then, because $y_1 = \textbf{0.5}_d\circ x_1 \not = x_1$ and $y_2 = x_1$, this n
 
 \subsection{Model 1 for basic same--different}\label{app:model1-results}
 
-\Figref{fig:model1} explores a wider range of hidden dimensionalities for Model~1 applied to the basic same--differerent task. As in the paper, the lines correspond to different embedding dimensionalities.
+\Figref{fig:model1} explores a wider range of hidden dimensionalities for Model~1 applied to the basic same--differerent task. The lines correspond to different embedding dimensionalities.
 
 \begin{figure}[H]
   \centering
@@ -745,7 +745,7 @@ Then, because $y_1 = \textbf{0.5}_d\circ x_1 \not = x_1$ and $y_2 = x_1$, this n
     \caption{Hidden dimensionality 100.}
     \label{fig:model1-rep}
   \end{subfigure}
-  \caption{Results for Model 1 for basic same--different.}
+  \caption{Results for Model 1 for basic same--different. \newatticus{Lines correspond to different input dimensions. These models were provided random input representations.}}
   \label{fig:model1}
 \end{figure}
 
@@ -755,7 +755,7 @@ Then, because $y_1 = \textbf{0.5}_d\circ x_1 \not = x_1$ and $y_2 = x_1$, this n
 
 \subsection{Model 2 for sequential same--different}
 
-\Figref{fig:model2} explores a wider range of hidden dimensionalities for Model~2 applied to the sequential ABA task. As in the paper, the lines correspond to different embedding dimensionalities. The full training set is presented to the model in multiple epochs.
+\Figref{fig:model2} explores a wider range of hidden dimensionalities for Model~2 applied to the sequential ABA task. The lines correspond to different embedding dimensionalities. The full training set is presented to the model in multiple epochs.
 
 \begin{figure}[H]
   \centering
@@ -790,7 +790,7 @@ Then, because $y_1 = \textbf{0.5}_d\circ x_1 \not = x_1$ and $y_2 = x_1$, this n
     \label{fig:model2-rep}
   \end{subfigure}
 
-  \caption{Results for Model 2 for basic same--different, with a vocabulary size of 20.}
+  \caption{Results for Model 2 for basic same--different, with a vocabulary size of 20. \newatticus{Lines correspond to different input dimensions. These models were provided random input representations.}}
   \label{fig:model2}
 \end{figure}
 
@@ -800,7 +800,7 @@ Then, because $y_1 = \textbf{0.5}_d\circ x_1 \not = x_1$ and $y_2 = x_1$, this n
 
 \subsection{Model 3a for hierarchical same--different}\label{app:model1-premack}
 
-\Figref{fig:model1:premack} shows the results of applying the model in \dasheg{eq:x2h-supp}{eq:h2y-supp} to the hierarchical same--different task. The only change from that model is that the inputs have dimensionality $4m$, since the four distinct representations in task inputs are simply concatenated.
+\Figref{fig:model1:premack} shows the results of applying the model in \dasheg{eq:x2h-supp}{eq:h2y-supp} to the hierarchical same--different task. \newatticus{The lines correspond to different embedding dimensionalities.} The only change from that model is that the inputs have dimensionality $4m$, since the four distinct representations in task inputs are simply concatenated.
 
 
 \begin{figure}[H]
@@ -834,7 +834,7 @@ Then, because $y_1 = \textbf{0.5}_d\circ x_1 \not = x_1$ and $y_2 = x_1$, this n
     \includegraphics[width=1\textwidth]{../fig/flatpremack-h1-train_size-embed_dim-hidden_dim=100.pdf}
     \caption{Hidden dimensionality 100.}
   \end{subfigure}
-  \caption{Results for Model 1 applied to the hierarchical same--different task.}
+  \caption{Results for Model 1 applied to the hierarchical same--different task. \newatticus{Lines correspond to different input dimensions. These models were provided random input representations.}}
   \label{fig:model1:premack}
 \end{figure}
 
@@ -844,7 +844,7 @@ Then, because $y_1 = \textbf{0.5}_d\circ x_1 \not = x_1$ and $y_2 = x_1$, this n
 
 \subsection{Model 3b for hierarchical same--different}
 
-\Figref{fig:model3a} shows the results of applying the model in \dasheg{eq:x2h1-supp}{eq:h2y2-supp} to the hierarchical same--different task.
+\Figref{fig:model3a} shows the results of applying the model in \dasheg{eq:x2h1-supp}{eq:h2y2-supp} to the hierarchical same--different task. \newatticus{The lines correspond to different embedding dimensionalities.}
 
 \begin{figure}[H]
   \centering
@@ -878,7 +878,7 @@ Then, because $y_1 = \textbf{0.5}_d\circ x_1 \not = x_1$ and $y_2 = x_1$, this n
     \caption{Hidden dimensionality 100.}
     \label{fig:model3a-rep}
   \end{subfigure}
-  \caption{Results for Model 3a applied to the hierarchical same--different task.}
+  \caption{Results for Model 3a applied to the hierarchical same--different task. \newatticus{Lines correspond to different input dimensions. These models were provided random input representations.}}
   \label{fig:model3a}
 \end{figure}
 
