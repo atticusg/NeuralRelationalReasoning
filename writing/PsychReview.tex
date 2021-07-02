@@ -190,8 +190,6 @@
 
 One of the key components of human intelligence is our ability to reason about abstract relations between stimuli. Many of the most unremarkable human activities -- scheduling a meeting, following traffic signs, assembling furniture -- require a fluency with abstraction and relational reasoning that is unmatched in nonhuman animals. An influential perspective on human uniqueness holds that relational concepts are critical to higher-order cognition \citep[e.g.,][]{Gentner:2003}. By far the most common case study of abstract relations has been equality.\footnote{We use the term ``equality'' here, though different literatures have also used ``identity.''} Equality is a valuable case study because it is simple and ubiquitous, but also completely abstract in the sense that it can be evaluated regardless of the identity of the stimuli being judged.
 
-However, the question of identity-based generalization is not only a theoretical argument about cognitive modeling; it can also help us to understand the foundations of abilities that are present in many more sophisticated systems, including those used in current technologies. As an example, we probed GPT-3 \cite{Brown:2020} with stimuli like those used in the original \citet{marcus:1999} experiments. Specifically, we show the model ABA sequences and then evaluated whether it completes partial ABA sequences. With only five training stimuli, we found apparent evidence of generalization similar to the performance of human adults (\citeauthor{Endress:2007} (2007) ; see appendix for full details).  While GPT-3 was pretrained on huge quantities of text, including natural languages, computer code, miscellaneous metadata, and other textual content with the objective of assigning high probability to sequences it saw during training, we will argue that the success of this complex deep learning model on our task is simply due to learned input representations being used rather than hand-crafted feature representations. Indeed, we will show that when non-featural input representations are used, standard feed-forward and recursive neural networks easily learn generalized equality relations, establishing neural networks as viable models of human equality reasoning.
-
 Human equality reasoning has been studied extensively across a host of systems and tasks, with wildly variant conclusions. In some studies, equality is very challenging to learn: only great apes with either extensive language experience or specialized training succeed in matching tasks in which a \emph{same} pair, AA, must be matched to a novel same pair, BB \cite{Premack:1983,thompson:2001}. Preschool children also struggle to learn these regularities in a seemingly similar task \citep{walker:2016}. In contrast, other studies suggest that equality is simple: bees are able to learn abstract identity relationships from only a small set of training trials \cite{giurfa:2001,avargues:2011}, and human infants can generalize identity patterns \cite{anderson:2018} and succeed in relational matching tasks \cite{ferry:2015}. We take the central challenge of this literature to be characterizing the conditions that lead to success or failure in learning an abstract relation in a way that can be productively generalized to new stimuli \citep{carstensen:inpress}.
 
 The learning task in all of these cases can be described using the predicate \emph{same} (or equivalently, =), which operates over two inputs and returns {\sc true} if they are identical in some respect. One perspective in the literature is that success in these learning tasks implies the presence of an equivalent symbolic description in the mind of the solver \cite{marcus:1999,Premack:1983}. This view does not provide a lever to distinguish which of these tasks are trivial and which are difficult, however. Further, it can fall prey to circularity: because newborns show sensitivity to identity relations \cite{gervain:2012}, then it would follow from this argument that they must have symbolic representations. If this logic applies also to bees, then we presuppose symbolic representations universally and have no account of the gradient difficulty of different tasks for different species.
@@ -372,7 +370,7 @@ Our work here makes three contributions. First, we resolve this longstanding deb
 
 \begin{subfigure}[t]{0.49\linewidth}
 \centering
-\begin{tikzpicture}[scale=0.6]
+\begin{tikzpicture}[scale=0.8]
 \begin{axis}[
  title={},
  grid=major,
@@ -407,7 +405,7 @@ axis lines=middle,
 \end{subfigure}
 \begin{subfigure}[t]{0.49\linewidth}
 \centering
-\begin{tikzpicture}[scale=0.6]
+\begin{tikzpicture}[scale=0.8]
 \begin{axis}[
  title={},
  no markers,
@@ -853,16 +851,6 @@ Hyperparameter searches and implementation details can be found in \appref{app:o
 %% Comment out or remove this line before generating final copy for submission; this will also remove the warning re: "Consecutive odd pages found".
 
 %% Adds the main heading for the SI text. Comment out this line if you do not have any supporting information text.
-
-\section{GPT-3 Experiments}
-
-\begin{figure}
-\includegraphics[scale=0.2]{gpt3}
-\label{fig:gpt3}
-\caption{A screen shot of the API we used to probe the generalization capabilities of GPT-3.}
-\end{figure}
-
-We used the GPT-3 Beta API, with the davinci model and all the default parameters provided by the interface, as captured by the screenshot in \figref{fig:gpt3}. Our prompts consisted of four lines prefixed with "I:", followed by examples of our target pattern, ABA, followed by a period. The fifth row was prefixed with "O:" and gave the first two symbols of an instance of the target pattern. The model then generated 64 characters of text. We observed that GPT-3 was generally good at reproducing the target pattern when we used simple two-character symbols, but that it often failed when the symbols or sequences potentially had a different meaning, as in our examples involving letter-number combinations and Pokeman character names. The results also varied across runs, with minor early mistakes often leading to completely incorrect outputs. The precise set of prompts and results are given here. The first three are first attempts, and the final three show repeated runs from our most successful prompt, where the results are generally very consistent.
 
 \section{Model Details}
 
