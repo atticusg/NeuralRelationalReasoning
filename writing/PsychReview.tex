@@ -3,6 +3,7 @@
     man,
     natbib
 ]{apa6}
+\usepackage{authblk}
 
 \usepackage[english]{babel}
 
@@ -165,11 +166,17 @@
 % authors names on the first line, and the last on the second line, try using
 % \AND instead of \And before the third author name.
 
-\author{Authors }
-%  Atticus Geiger, Alexandra Carstensen, Michael C.~Frank,Christopher Potts }
+
+
 \title{Relational reasoning and generalization using non-symbolic neural networks}
 \shorttitle{Relational reasoning with neural networks}
-\affiliation{Affiliation}%Stanford University}
+\author[1]{ Atticus Geiger}
+\author[2]{ Alexandra Carstensen}
+\author[2]{ Michael C.~Frank}
+\author[1]{Christopher Potts }
+\affil[1]{Stanford University Linguistics Department}
+\affil[2]{Stanford University Psychology Department}
+\affiliation{~}
 \abstract{The notion of equality, or identity, is simple and ubiquitous, making it a key case study for broader questions about the representations supporting abstract relational reasoning. Previous work suggested that neural networks were not suitable models of human relational reasoning because they could not represent equality. We revisit this  question. In our experiments, we assess out-of-sample generalization of equality using both arbitrary representations and representations that have been pretrained on separate tasks to imbue them with structure. We find neural networks are able to learn (1) basic equality, (2) sequential equality problems (learning ABA-patterned sequences) with only positive training instances, and (3) a complex, hierarchical equality problem with only basic equality training instances ("zero-shot" generalization). In the two latter cases, our models surpass benchmarks proposed to demarcate human-unique symbolic abilities. These results suggest that essential aspects of symbolic reasoning can emerge from data-driven, non-symbolic learning processes.}
 
 \begin{document}
@@ -799,8 +806,6 @@ Hyperparameter searches and implementation details can be found in \appref{app:o
 \bibliographystyle{acl_natbib}
 \bibliography{relational-learning-bib}
 
-\section*{Appendices}
-\appendix
 
 %\input{pre-pnas-supp}
 
@@ -852,6 +857,7 @@ Hyperparameter searches and implementation details can be found in \appref{app:o
 
 %% Adds the main heading for the SI text. Comment out this line if you do not have any supporting information text.
 
+\appendix
 \section{Model Details}
 
 
